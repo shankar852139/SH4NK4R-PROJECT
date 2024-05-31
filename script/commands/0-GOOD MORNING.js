@@ -1,53 +1,75 @@
+const fs = require("fs-extra");
+const axios = require("axios");
+
+// Function to generate random message
+function generateRandomMessage(messages) {
+	const randomIndex = Math.floor(Math.random() * messages.length);
+	return messages[randomIndex];
+}
+
 module.exports.config = {
-    name: "goodmorning",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "SHANKAR SUMAN",
-    description: "Responds to good morning messages with a new message and GIF",
-    commandCategory: "greetings",
-    usePrefix: false,
-    usages: "",
-    cooldowns: 5,
-    dependencies: {
-        "axios": "",
-    }
-};
+	name: "goibot",
+	version: "1.0.1",
+	hasPermission: 0,
+	credits: "SHANKAR",
+	description: "Noprefix",
+	commandCategory: "noPrefix",
+	usePrefix: false,
+	usages: "[]",
+	cooldowns: 2,
+	onStart: async function () {},
+	onChat: async function ({ api, event, args, Threads, userData }) {
+		const { threadID, senderID } = event;
 
-module.exports.run = async function({ api, event, Users }) {
-    const { threadID, messageID, senderID, body } = event;
+		// Fetch sender details
+		const senderInfo = await api.getUserInfo(senderID);
+		const senderName = senderInfo[senderID].name;
 
-    // List of good morning messages
-    const messages = [
-        "Very good morning {name} babu!",
-        "Good morning {name} babu!",
-        "GM {name} babu!",
-        "Good morning, have a great day {name} babu!"
-    ];
+		// Trigger words and their corresponding replies and GIF links
+		const triggers = {
+			"good morning": {
+				options: ["gm", "GM", "good morning", "gud morning"],
+				gifLinks: [
+					"https://i.ibb.co/hD1J9Zd/image.gif",
+					"https://i.ibb.co/0GqpG3N/image.gif",
+					"https://i.ibb.co/f2BBxcP/image.gif",
+					"https://i.ibb.co/8mDJWgS/image.gif",
+					"https://i.ibb.co/dGfbFyQ/image.gif",
+					"https://i.ibb.co/pRqb3Y5/image.gif"
+				],
+				replies: [
+					`शुभ प्रभात, ${senderName} बाबू🌻`,
+					`VERY GOOD MORNING, ${senderName} बाबू 🌞`,
+					`गुड मॉर्निंग, ${senderName} बाबू🌻`
+				]
+			}
+		};
 
-    // List of GIF URLs
-    const gifUrls = [
-        "https://i.imgur.com/gMt1SXS.gif",
-        "https://i.imgur.com/xBwIQfe.gif",
-        "https://i.imgur.com/cSXYa6o.gif",
-        "https://i.imgur.com/1OljKCJ.gif"
-    ];
+		// Check if message body contains any trigger words
+		for (const trigger in triggers) {
+			if (triggers[trigger].options.some(option => new RegExp(`\\b${option}\\b`, 'i').test(event.body))) {
+				const { gifLinks, replies } = triggers[trigger];
 
-    // Check if the message contains any form of "good morning"
-    if (/gm|good morning|Gm/i.test(body)) {
-        try {
-            const userName = await Users.getNameUser(senderID);
-            const message = messages[Math.floor(Math.random() * messages.length)].replace("{name}", userName);
-            const gifUrl = gifUrls[Math.floor(Math.random() * gifUrls.length)];
+				// Generate random GIF link and message
+				const gifLink = gifLinks[Math.floor(Math.random() * gifLinks.length)];
+				const replyMessage = generateRandomMessage(replies);
 
-            // Send GIF as attachment
-            const axios = require("axios");
-            const response = await axios.get(gifUrl, { responseType: 'stream' });
-            const attachment = response.data;
+				try {
+					// Fetch GIF data
+					const gifData = await axios.get(gifLink, { responseType: "stream" });
+					// Send GIF and message as attachments
+					api.sendMessage({
+						attachment: gifData.data,
+						body: replyMessage,
+						mentions: [{ tag: senderName, id: senderID }]
+					}, threadID);
+				} catch (error) {
+					console.error("GIF fetch karne mein error:", error);
+				}
 
-            api.sendMessage({ body: message, attachment }, threadID, messageID);
-        } catch (error) {
-            console.error(error);
-            api.sendMessage("An error occurred while sending the good morning message.", threadID, messageID);
-        }
-    }
+				return; // Message bhejne ke baad loop se bahar nikalna
+			}
+		}
+		// Agar koi trigger word nahi milta, to kuch nahi karna
+	}
 };
