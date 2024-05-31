@@ -36,7 +36,7 @@ module.exports.run = async ({ api, event }) => {
 	const song = data.join(" ");
 
 	try {
-		api.sendMessage(`दो minute रुको आपको"${song}". भेज रहा हूं।🥰...`, event.threadID);
+		api.sendMessage(`दो मिनट रुको बाबू आपको"${song}". सॉन्ग भेज रहा हूं।🥰`, event.threadID);
 
 		const searchResults = await yts(song);
 		if (!searchResults.videos.length) {
