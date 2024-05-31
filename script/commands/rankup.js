@@ -5,6 +5,16 @@ const { promises: fsPromises } = require('fs');
 
 const userDataPath = path.join(__dirname, 'cache', 'userData.json');
 
+// Ensure the cache directory exists
+if (!fs.existsSync(path.join(__dirname, 'cache'))) {
+  fs.mkdirSync(path.join(__dirname, 'cache'));
+}
+
+// Ensure the userData.json file exists
+if (!fs.existsSync(userDataPath)) {
+  fs.writeFileSync(userDataPath, JSON.stringify({}));
+}
+
 async function getUserName(api, senderID) {
   try {
     const userInfo = await api.getUserInfo(senderID);
@@ -16,7 +26,6 @@ async function getUserName(api, senderID) {
 }
 
 async function updateRankApi(senderID, name, currentExp, level) {
-  
   const requiredXp = Math.floor(1000 * Math.pow(level, 2));
 
   const rankApiUrl = `https://rankupbyjonellv2-5fb030af5c27.herokuapp.com/rankCard?name=${encodeURIComponent(name)}&level=Level${level}&color=auto&facebookSenderId=${senderID}&progress=69&rank=1&currentXp=${currentExp}&requiredXp=${requiredXp}&showXp=true`;
@@ -47,8 +56,14 @@ module.exports.config = {
 };
 
 module.exports.handleEvent = async function ({ api, event }) {
-  let userData = JSON.parse(fs.readFileSync(userDataPath, 'utf8'));
   const userId = event.senderID;
+
+  let userData;
+  try {
+    userData = JSON.parse(await fsPromises.readFile(userDataPath, 'utf8'));
+  } catch (error) {
+    userData = {};
+  }
 
   if (userData[userId]) {
     userData[userId].exp = (userData[userId].exp || 0) + 2;
@@ -57,7 +72,7 @@ module.exports.handleEvent = async function ({ api, event }) {
       userData[userId].level += 1;
       userData[userId].exp -= expNeeded;
       const rankLevel = userData[userId].level;
-      const announcement = `⏫ | ${await getUserName(api, userId)} Your Keyboard Hero has leveled up to level ${rankLevel}! `;
+      const announcement = `⏫ | ${await getUserName(api, userId)} Your Keyboard Hero has leveled up to level ${rankLevel}!`;
 
       const imagePath = await updateRankApi(userId, await getUserName(api, userId), userData[userId].exp, rankLevel);
 
@@ -74,7 +89,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     userData[userId] = { exp: 1, level: 1 };
   }
 
-  fs.writeFileSync(userDataPath, JSON.stringify(userData, null, 2));
+  await fsPromises.writeFile(userDataPath, JSON.stringify(userData, null, 2));
 }
 
 module.exports.run = async function ({ api, event }) {
