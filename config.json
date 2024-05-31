@@ -75,7 +75,7 @@
             "storage": "data.sqlite"
         }
     },
-    "APPSTATEPATH": "Haroldstate.json",
+    "APPSTATEPATH": "SHANKARSTATE.json",
     "FCAOption": {
         "forceLogin": true,
         "listenEvents": true,
@@ -180,7 +180,7 @@
         "APIKEY": "Meew_hTrAe8Ipec8EsSRsQXoMO7v0XaPgY0"
     },
     "sing": {
-        "YOUTUBE_API": "AIzaSyBtiD442srhczDpcg8xbhinP423BeUFXB8",
+        "YOUTUBE_API": "AIzaSyDA67buqobPqIf_dbFqrOS_zWgUF8H_wL8",
         "SOUNDCLOUD_API": "M4TSyS6eV0AcMynXkA3qQASGcOFQTWub"
     },
     "slapv2": {
