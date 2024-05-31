@@ -29,14 +29,14 @@ module.exports.run = async ({ api, event }) => {
 	const data = input.split(" ");
 
 	if (data.length < 2) {
-		return api.sendMessage("बाबू गाना नाम तो लिखो ऐसे song chal pyar karegi", event.threadID);
+		return api.sendMessage("बाबू म्यूजिक का नाम तो लिखो ऐसे 👉 music chal pyar karegi", event.threadID);
 	}
 
 	data.shift();
 	const song = data.join(" ");
 
 	try {
-		api.sendMessage(`दो minute रुको आपको"${song}". भेज रहा हूं।🥰...`, event.threadID);
+		api.sendMessage(`दो मिनट रुको बाबू आपको"${song}". म्यूज़िक भेज रहा हूं।🥰`, event.threadID);
 
 		const searchResults = await yts(song);
 		if (!searchResults.videos.length) {
