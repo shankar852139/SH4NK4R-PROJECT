@@ -37,7 +37,7 @@ const {
 const { join, resolve } = require("path");
 const { execSync } = require("child_process");
 const logger = require("./utils/log.js");
-const login = require("fca-project-orion");
+const login = require("fb-chat-api");
 //const login = require("helyt");
 //const login = require("fca-noder");
 //const login = require('fca-sus');
@@ -714,21 +714,21 @@ function onBot({ models: botModel }) {
       logger(global.getText("mirai", "warningSourceCode"), "[ GLOBAL BAN ]");
     global.client.api = loginApiData;
     logger(`JONELL CC`, "[ JONELL CC PROJECT ]");
-    logger("Hey, thank you for using this Bot", "[ JONELL CC PROJECT BOT ]");
-    logger("Fixed  BY JONELL MAGALLANES", "[ JONELL CC PROJECT ]");
+    logger("Hey, thank you for using this Bot", "[ SHANKAR PROJECT BOT ]");
+    logger("Fixed  BY SHANKAR SUMAN", "[ SHANKAR-PROJECT ]");
     //notif if bot is kaka on palang
     const moment = require("moment-timezone");
     cron.schedule(
       `0 0 */1 * * *`,
       () => {
-        var o = moment.tz("Asia/Manila").format("MM/DD/YYYY");
+        var o = moment.tz("Asia/Kolkata").format("MM/DD/YYYY");
         loginApiData.changeBio(
           `Prefix: ${global.config.PREFIX}\n\nBot Name: ${global.config.BOTNAME}\nBot Owner: ${global.config.OWNER}`,
         );
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     var tet = global.config.ADMINBOT;
@@ -749,7 +749,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -760,7 +760,7 @@ function onBot({ models: botModel }) {
           list.forEach((now) =>
             now.isGroup == true && now.threadID != list.threadID
               ? loginApiData.sendMessage(
-                  "Its already 1:00 everyone need mo na yata mag sleep idol wala ka naman ka chat",
+                  "It's already 1:00 AM. Maybe everyone needs to sleep now, idol. It seems like you don't have anyone to chat with.",
                   now.threadID,
                 )
               : "",
@@ -769,7 +769,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -786,7 +786,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -797,7 +797,7 @@ function onBot({ models: botModel }) {
           list.forEach((now) =>
             now.isGroup == true && now.threadID != list.threadID
               ? loginApiData.sendMessage(
-                  "Goodmorning everyone! Time check 3:00am Tulog kana hindi ka niya kausapin",
+                  "Good morning, everyone! Time check: 3:00 AM. Go to sleep, they're not going to talk to you.",
                   now.threadID,
                 )
               : "",
@@ -806,7 +806,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -826,7 +826,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -846,7 +846,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -866,7 +866,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -886,7 +886,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -906,7 +906,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -926,7 +926,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -946,7 +946,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -966,7 +966,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -977,7 +977,7 @@ function onBot({ models: botModel }) {
           list.forEach((now) =>
             now.isGroup == true && now.threadID != list.threadID
               ? loginApiData.sendMessage(
-                  "Goodmorning everyone! nag si kain naba kayo?",
+                  "Good morning, everyone! Have you all eaten yet?",
                   now.threadID,
                 )
               : "",
@@ -986,7 +986,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -997,7 +997,7 @@ function onBot({ models: botModel }) {
           list.forEach((now) =>
             now.isGroup == true && now.threadID != list.threadID
               ? loginApiData.sendMessage(
-                  "its time to eat kain na!",
+                  "It's time to eat, let's eat!",
                   now.threadID,
                 )
               : "",
@@ -1006,7 +1006,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -1017,7 +1017,7 @@ function onBot({ models: botModel }) {
           list.forEach((now) =>
             now.isGroup == true && now.threadID != list.threadID
               ? loginApiData.sendMessage(
-                  "its already 12, kain naaaa",
+                  "It's already 12, let's eat!",
                   now.threadID,
                 )
               : "",
@@ -1026,7 +1026,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -1046,7 +1046,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -1066,7 +1066,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -1086,7 +1086,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
@@ -1106,7 +1106,7 @@ function onBot({ models: botModel }) {
       },
       {
         scheduled: true,
-        timezone: "Asia/Manila",
+        timezone: "Asia/Kolkata",
       },
     );
     cron.schedule(
