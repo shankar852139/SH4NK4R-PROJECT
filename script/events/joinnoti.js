@@ -65,9 +65,9 @@ axios.get(gifUrl, { responseType: 'arraybuffer' })
   }
   else {
     try {
-      if (!fs.existsSync(__dirname + `/cache/font/Semi.ttf`)) {
+      if (!fs.existsSync(__dirname + `/cache/Semi.ttf`)) {
         let getfont = (await axios.get(fontlink, { responseType: "arraybuffer" })).data;
-        fs.writeFileSync(__dirname + `/cache/font/Semi.ttf`, Buffer.from(getfont, "utf-8"));
+        fs.writeFileSync(__dirname + `/cache/Semi.ttf`, Buffer.from(getfont, "utf-8"));
       };
       const { createReadStream, existsSync, mkdirSync, readdirSync } = global.nodemodule["fs-extra"];
       let { threadName, participantIDs } = await api.getThreadInfo(threadID);
@@ -101,7 +101,7 @@ axios.get(gifUrl, { responseType: 'arraybuffer' })
         var avatar = await this.circle(pathAva);
         let baseImage = await loadImage(pathImg);
         let baseAva = await loadImage(avatar);
-        registerFont(__dirname + `/cache/font/Semi.ttf`, {
+        registerFont(__dirname + `/cache/Semi.ttf`, {
           family: "Semi"
         });
         let canvas = createCanvas(1902, 1082);
