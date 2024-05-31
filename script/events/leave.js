@@ -1,42 +1,56 @@
-const fs = require("fs");
 const axios = require("axios");
 
 module.exports.config = {
-    name: "leaveNoti",
-    eventType: ["log:unsubscribe"],
-    version: "1.0.0",
-    credits: "Deku",
-    description: "Notify left members",
-    dependencies: {
-        "fs-extra": "",
-        "path": ""
-    }
+  name: "leave",
+  eventType: ["log:unsubscribe"],
+  version: "1.0.0",
+  credits: "MrTomXxX", // Mod by H.Thanh
+  description: "Notify the Bot or the person leaving the group with a random gif/photo/video",
+  dependencies: {
+    "axios": "^1.6.2"
+  }
 };
+
+module.exports.onLoad = function () {
+  return;
+}
 
 module.exports.run = async function({ api, event, Users, Threads }) {
-    function reply(data) {
-        api.sendMessage(data, event.threadID, event.messageID);
-    }
+  if (event.logMessageData.leftParticipantFbId == api.getCurrentUserID()) return;
 
-    if (event.logMessageData.leftParticipantFbId == api.getCurrentUserID()) return;
+  const { threadID } = event;
+  const moment = require("moment-timezone");
+  const time = moment.tz("Asia/Kolkata").format("DD/MM/YYYY || HH:mm:s");
+  const hours = moment.tz("Asia/Kolkata").format("HH");
+  const data = global.data.threadData.get(parseInt(threadID)) || (await Threads.getData(threadID)).data;
+  const name = global.data.userName.get(event.logMessageData.leftParticipantFbId) || await Users.getNameUser(event.logMessageData.leftParticipantFbId);
+  const type = (event.author == event.logMessageData.leftParticipantFbId) ? "खुद ही भाग गया😐👈" : "एडमिन ने गुस्से में निकाल दिया।😑👈";
+  
+  // Provided GIF URLs
+  const gifUrls = [
+    "https://i.imgur.com/hpCZF59.gif",
+    "https://i.imgur.com/hArfbEv.gif",
+    "https://i.imgur.com/dIkSLCv.gif",
+    "https://i.imgur.com/EswO9hk.gif"
+  ];
 
-    let { threadName, participantIDs } = await api.getThreadInfo(event.threadID);
-    const type = (event.author == event.logMessageData.leftParticipantFbId) ? "left the group." : "kicked by Admin of the group";
-    let pathh = __dirname + `/cache/bye.png`;
-    let name = (await api.getUserInfo(event.logMessageData.leftParticipantFbId))[event.logMessageData.leftParticipantFbId].name;
-    let avt = ["https://i.postimg.cc/wMWZwp7p/images-2024-04-02-T195017-832.jpg", "https://i.postimg.cc/4xXwmMdv/images-2024-04-02-T195026-517.jpg", "https://i.postimg.cc/kGc6Zjm9/images-2024-04-02-T195041-233.jpg", "https://i.postimg.cc/5Ny2b958/images-2024-04-02-T195048-119.jpg"];
-    let avt1 = avt[Math.floor(Math.random() * avt.length)];
-    const firstName = name.split(" ")[0]; // Extracting the first name
+  // Randomly select a GIF URL
+  const gifUrl = gifUrls[Math.floor(Math.random() * gifUrls.length)];
 
-    let encodedUrl = `https://leavev2byjonellmagallanes-c0af5f501196.herokuapp.com/leave?name=${firstName}&id=${event.logMessageData.leftParticipantFbId}&background=${avt1}&count=${participantIDs.length}`;
+  var msg;
+  (typeof data.customLeave == "undefined") ? msg = "सुकर है एक ठरकी इस ग्रुप में कम हो गया😑👈\nनाम👉 {name}\nरीजन👉 {type} \n हमारे साथ अपना कीमती समय देने के लिए धन्यवाद {name} जल्द ही फिर मिलेंगे😊💔\n\n[❤️‍🔥] बाय बाय खुश रहना हमेशा. {session} || {time} \n▰▱▰▱▰▱▰▱▰▱▰▱▰▱▰▱ \n credit:-SHANKAR-SUMAN \n " : msg = data.customLeave;
+  msg = msg.replace(/\{name}/g, name).replace(/\{type}/g, type).replace(/\{session}/g, hours <= 10 ? "𝙈𝙤𝙧𝙣𝙞𝙣𝙜" : 
+    hours > 10 && hours <= 12 ? "𝘼𝙛𝙩𝙚𝙧𝙣𝙤𝙤𝙣" :
+    hours > 12 && hours <= 18 ? "𝙀𝙫𝙚𝙣𝙞𝙣𝙜" : "𝙉𝙞𝙜𝙝𝙩").replace(/\{time}/g, time);
 
-    axios.get(encodeURI(encodedUrl), { responseType: 'arraybuffer' })
-        .then(response => {
-            fs.writeFileSync(pathh, Buffer.from(response.data, 'binary'));
-            reply({
-                body: `${name} has been ${type}\nMember’s left: ${participantIDs.length}`,
-                attachment: fs.createReadStream(pathh)
-            });
-        })
-        .catch(error => console.log("Axios Error: ", error));
-};
+  // Create a request to download the image
+  const response = await axios({
+    url: gifUrl,
+    method: "GET",
+    responseType: "stream"
+  });
+
+  const formPush = { body: msg, attachment: response.data };
+
+  return api.sendMessage(formPush, threadID);
+}
