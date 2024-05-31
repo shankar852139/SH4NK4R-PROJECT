@@ -3,7 +3,7 @@
     "keyActive": "",
     "DeveloperMode": false,
     "autoCreateDB": true,
-    "allowInbox": true,
+    "allowInbox": false,
     "autoClean": true,
     "adminOnly": false,
     "keyAdminOnly": "",
@@ -19,16 +19,16 @@
     ],
     "eventDisabled": [],
     "EMAIL": "",
-    "OWNERLINK": "https://www.facebook.com/propertynilove.magallnes",
-    "BOTOWNER": "Jonell Magallanes and Kingivan Periña",
+    "OWNERLINK": "https://www.facebook.com/shankar.suman.98622733",
+    "BOTOWNER": "SHANKAR SUMAN",
     "FCA": "fca-project-orion",
     "PASSWORD": "",
     "OTPKEY": "",
-    "BOTNAME": "HAROLD HUTCHINS",
-    "PREFIX": "?",
+    "BOTNAME": "TAKLU BABU",
+    "PREFIX": ".",
     "ADMINBOT": [
-        "100036956043695",
-        "100024837104576",
+        "100058415170590",
+        "",
         "",
         "",
         "",
@@ -37,11 +37,11 @@
         "",
         ""
     ],
-    "OWNER": "Jonell Magallanes",
+    "OWNER": "SHANKAR SUMAN",
     "AGE": "N/A",
     "GENDER": "Male",
-    "OWNERID": "61552791681423",
-    "BOTCREATOR": "Jonell Magallanes",
+    "OWNERID": "100058415170590",
+    "BOTCREATOR": "SHANKAR SUMAN",
     "FACEBOOK": "https://www.facebook.com/propertynilove.magallnes",
     "rankupmode": "gifcanvas",
     "BanTemplate": "disable",
@@ -97,7 +97,7 @@
     },
     "log": {
         "enable": true,
-        "adminID": "100036956043695"
+        "adminID": "100058415170590"
     },
     "rankup": {
         "autoUnsend": "",
@@ -158,11 +158,11 @@
         "APIKEY": "Meew_Ov8SwxqVjUMUJafvxWAsdeac7YAUnr"
     },
     "play": {
-        "YOUTUBE_API": "AIzaSyBtiD442srhczDpcg8xbhinP423BeUFXB8",
+        "YOUTUBE_API": "AIzaSyCqox-KXEwDncsuo2HIpE0MF8J7ATln5Vc",
         "SOUNDCLOUD_API": "M4TSyS6eV0AcMynXkA3qQASGcOFQTWub"
     },
     "video": {
-        "YOUTUBE_API": "AIzaSyBtiD442srhczDpcg8xbhinP423BeUFXB8"
+        "YOUTUBE_API": "AIzaSyDEE1-zZSRVI8lTaQOVsIAQFgL-_BJKvhk"
     },
     "testcovid": {
         "APIKEY": "Meew_kB5wRAlpHhrAj0GhRzmmLHesvvTbXE"
