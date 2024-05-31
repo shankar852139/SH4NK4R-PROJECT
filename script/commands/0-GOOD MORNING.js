@@ -8,7 +8,7 @@ function generateRandomMessage(messages) {
 }
 
 module.exports.config = {
-	name: "goibot",
+	name: "goodmorning",
 	version: "1.0.1",
 	hasPermission: 0,
 	credits: "SHANKAR",
