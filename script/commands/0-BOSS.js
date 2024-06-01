@@ -15,11 +15,11 @@ module.exports.config = {
 };
 
 const gifs = [
-    "https://i.imgur.com/BOkF9m9.jpg"
+    "https://i.imgur.com/BOkF9m9.jpg",
 ];
 
 const messages = [
-    "🥰𝗕𝗢𝗦𝗦 𝗜𝗦 𝗛𝗘𝗥𝗘❤️"
+    "🥰𝗕𝗢𝗦𝗦 𝗜𝗦 𝗛𝗘𝗥𝗘❤️",
 ];
 
 module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
