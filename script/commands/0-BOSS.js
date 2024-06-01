@@ -8,14 +8,14 @@ module.exports.config = {
     hasPermssion: 0,
     credits: "SHANKAR SUMAN",
     description: "no prefix",
-    usePrefix: false,
+  usePrefix: false,
     commandCategory: "No command marks needed",
     usages: "Yo Yo",
     cooldowns: 5,
 };
 
 const gifs = [
-    "https://i.imgur.com/BOkF9m9.jpg" // Aap yahan aur URLs add kar sakte hain
+    "https://i.imgur.com/BOkF9m9.jpg"
 ];
 
 const messages = [
