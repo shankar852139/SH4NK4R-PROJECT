@@ -24,12 +24,13 @@ const messages = [
 
 module.exports.handleEvent = async function({ api, event, client, __GLOBAL }) {
     var { threadID, messageID } = event;
+    console.log("Received message:", event.body);
 
-    if (event.body.toLowerCase().startsWith("boss") || 
-        event.body.toLowerCase().startsWith("@Shankar Suman") || 
-        event.body.toLowerCase().startsWith("SHANKAR") || 
-        event.body.toLowerCase().startsWith("shankar") || 
-        event.body.toLowerCase().startsWith("BOSS")) { 
+    if (event.body.toLowerCase().includes("boss") || 
+        event.body.toLowerCase().includes("@Shankar Suman") || 
+        event.body.toLowerCase().includes("shankar") || 
+        event.body.toLowerCase().includes("boss")) { 
+        console.log("Trigger words detected!");
 
         // Select random GIF and message
         const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
@@ -40,14 +41,18 @@ module.exports.handleEvent = async function({ api, event, client, __GLOBAL }) {
         request(randomGif)
             .pipe(fs.createWriteStream(downloadPath))
             .on('finish', () => {
+                console.log("Image downloaded successfully.");
+
                 var msg = {
                     body: randomMessage,
                     attachment: fs.createReadStream(downloadPath)
                 };
                 api.sendMessage(msg, threadID, (err) => {
-                    if (err) return console.error(err);
+                    if (err) return console.error("Error sending message:", err);
+                    console.log("Message sent successfully.");
                     api.setMessageReaction("🥰", messageID, (err) => {
-                        if (err) console.error(err);
+                        if (err) console.error("Error reacting to message:", err);
+                        console.log("Reaction added successfully.");
                     }, true);
                 });
             })
