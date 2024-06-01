@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports.config = {
-    name: "good-morning",
+    name: "boss",
     version: "1.0.1",
     hasPermssion: 0,
     credits: "SHANKAR SUMAN",
