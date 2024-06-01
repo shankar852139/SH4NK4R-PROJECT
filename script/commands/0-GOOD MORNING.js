@@ -27,9 +27,9 @@ const messages = [
 		"🌄ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ, {name}! ᴛʀʏ ꜱᴏᴍᴇ ᴄᴏꜰꜰᴇᴇ ᴏʀ ᴛᴇᴀ ᴛᴏ ᴡᴀᴋᴇ ʏᴏᴜ ᴜᴘ☀️☕",
 		"🌅ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ, {name}! ʜᴀᴠᴇ ᴀ ᴡᴏɴᴅᴇʀꜰᴜʟ ᴅᴀʏ✨",
 		"🌞ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ, {name}! ʟᴇᴛ'ꜱ ᴍᴀᴋᴇ ᴛʜɪꜱ ᴅᴀʏ ᴀᴡᴇꜱᴏᴍᴇ🌻",
-		"gm {name} babu",
-		"very good {name} babu",
-		"good morning {name} babu"
+		"VERY GOOD MORNING {name} BABU🌄",
+		"very good morning {name} babu🌄",
+		"good morning {name} babu🌄"
 ];
 
 module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
@@ -37,10 +37,10 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
 		var name = await Users.getNameUser(event.senderID);
 
 		if (event.body.toLowerCase().startsWith("good morning") || 
-				event.body.toLowerCase().startsWith("good gm") || 
+				event.body.toLowerCase().startsWith("gm") || 
 				event.body.toLowerCase().startsWith("morning") || 
-				event.body.toLowerCase().startsWith("bago paka gising") || 
-				event.body.toLowerCase().startsWith("magandang araw")) { 
+				event.body.toLowerCase().startsWith("GM") || 
+				event.body.toLowerCase().startsWith("GOOD MORNING")) { 
 
 				// Select random GIF and message
 				const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
