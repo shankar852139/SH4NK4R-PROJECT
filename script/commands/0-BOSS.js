@@ -8,7 +8,7 @@ module.exports.config = {
     hasPermssion: 0,
     credits: "SHANKAR SUMAN",
     description: "no prefix",
-  usePrefix: false,
+    usePrefix: false,
     commandCategory: "No command marks needed",
     usages: "Yo Yo",
     cooldowns: 5,
@@ -38,14 +38,23 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
         const downloadPath = path.join(__dirname, 'Good-Morning-Gif-Images.gif');
 
         // Download image from Imgur
-        request(randomGif).pipe(fs.createWriteStream(downloadPath)).on('close', () => {
-            var msg = {
-                body: randomMessage,
-                attachment: fs.createReadStream(downloadPath)
-            };
-            api.sendMessage(msg, threadID, messageID);
-            api.setMessageReaction("🥰", event.messageID, (err) => {}, true);
-        });
+        request(randomGif)
+            .pipe(fs.createWriteStream(downloadPath))
+            .on('finish', () => {
+                var msg = {
+                    body: randomMessage,
+                    attachment: fs.createReadStream(downloadPath)
+                };
+                api.sendMessage(msg, threadID, (err) => {
+                    if (err) return console.error(err);
+                    api.setMessageReaction("🥰", event.messageID, (err) => {
+                        if (err) console.error(err);
+                    }, true);
+                });
+            })
+            .on('error', (err) => {
+                console.error("Error downloading the image: ", err);
+            });
     }
 }
 
