@@ -22,9 +22,8 @@ const messages = [
     "🥰𝗕𝗢𝗦𝗦 𝗜𝗦 𝗛𝗘𝗥𝗘❤️",
 ];
 
-module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
+module.exports.handleEvent = async function({ api, event, client, __GLOBAL }) {
     var { threadID, messageID } = event;
-    var name = await Users.getNameUser(event.senderID);
 
     if (event.body.toLowerCase().startsWith("boss") || 
         event.body.toLowerCase().startsWith("@Shankar Suman") || 
@@ -34,7 +33,7 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
 
         // Select random GIF and message
         const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)].replace("{name}", name);
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
         const downloadPath = path.join(__dirname, 'Good-Morning-Gif-Images.gif');
 
         // Download image from Imgur
@@ -47,7 +46,7 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
                 };
                 api.sendMessage(msg, threadID, (err) => {
                     if (err) return console.error(err);
-                    api.setMessageReaction("🥰", event.messageID, (err) => {
+                    api.setMessageReaction("🥰", messageID, (err) => {
                         if (err) console.error(err);
                     }, true);
                 });
