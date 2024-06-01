@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports.config = {
-    name: "boss",
+    name: "good-morning",
     version: "1.0.1",
     hasPermssion: 0,
     credits: "SHANKAR SUMAN",
@@ -14,51 +14,29 @@ module.exports.config = {
     cooldowns: 5,
 };
 
-const gifs = [
-    "https://i.imgur.com/BOkF9m9.jpg",
-];
+const gif = "https://i.imgur.com/BOkF9m9.jpg";
+const message = "🥰𝗕𝗢𝗦𝗦 𝗜𝗦 𝗛𝗘𝗥𝗘❤️";
 
-const messages = [
-    "🥰𝗕𝗢𝗦𝗦 𝗜𝗦 𝗛𝗘𝗥𝗘❤️",
-];
-
-module.exports.handleEvent = async function({ api, event, client, __GLOBAL }) {
+module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
     var { threadID, messageID } = event;
-    console.log("Received message:", event.body);
 
-    if (event.body.toLowerCase().includes("boss") || 
-        event.body.toLowerCase().includes("@Shankar Suman") || 
-        event.body.toLowerCase().includes("shankar") || 
-        event.body.toLowerCase().includes("boss")) { 
-        console.log("Trigger words detected!");
+    if (event.body.toLowerCase().startsWith("@Shankar Suman") || 
+        event.body.toLowerCase().startsWith("boss") || 
+        event.body.toLowerCase().startsWith("Shankar") || 
+        event.body.toLowerCase().startsWith("Shankar") || 
+        event.body.toLowerCase().startsWith("BOSS")) { 
 
-        // Select random GIF and message
-        const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-        const downloadPath = path.join(__dirname, 'Good-Morning-Gif-Images.gif');
+        const downloadPath = path.join(__dirname, 'Boss-Jpg-Images.jpg');
 
         // Download image from Imgur
-        request(randomGif)
-            .pipe(fs.createWriteStream(downloadPath))
-            .on('finish', () => {
-                console.log("Image downloaded successfully.");
-
-                var msg = {
-                    body: randomMessage,
-                    attachment: fs.createReadStream(downloadPath)
-                };
-                api.sendMessage(msg, threadID, (err) => {
-                    if (err) return console.error("Error sending message:", err);
-                    console.log("Message sent successfully.");
-                    api.setMessageReaction("🥰", messageID, (err) => {
-                        if (err) console.error("Error reacting to message:", err);
-                        console.log("Reaction added successfully.");
-                    }, true);
-                });
-            })
-            .on('error', (err) => {
-                console.error("Error downloading the image: ", err);
-            });
+        request(gif).pipe(fs.createWriteStream(downloadPath)).on('close', () => {
+            var msg = {
+                body: message,
+                attachment: fs.createReadStream(downloadPath)
+            };
+            api.sendMessage(msg, threadID, messageID);
+            api.setMessageReaction("🥰", event.messageID, (err) => {}, true);
+        });
     }
 }
 
