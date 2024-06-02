@@ -33,39 +33,53 @@ const responses = {
         cooldowns: 5,
     };
 
-    module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
-        var { threadID, messageID, senderID, body } = event;
-        const keys = Object.keys(responses);
+    module.exports.config = {
+    name: "autoReply",
+    version: "1.0.0",
+    hasPermssion: 0,
+    credits: "SHANKAR SUMAN",
+    description: "Auto-reply to specific emojis and keywords",
+    commandCategory: "No command marks needed",
+    usePrefix: false,
+    cooldowns: 5,
+};
 
-        // Convert the message body to lowercase for case-insensitive matching
-        const lowerBody = body.toLowerCase();
+module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
+    var { threadID, messageID, senderID, body } = event;
+    const keys = Object.keys(responses);
 
-        for (const key of keys) {
-            // Check if the lowercase message body includes the lowercase keyword
-            if (lowerBody.includes(key.toLowerCase())) {
-                try {
-                    const userInfo = await api.getUserInfo(senderID);
-                    if (!userInfo || !userInfo[senderID] || !userInfo[senderID].name) {
-                        console.error(`User info not found for senderID: ${senderID}`);
-                        return;
-                    }
-                    const userName = userInfo[senderID].name;
+    // Convert the message body to lowercase for case-insensitive matching
+    const lowerBody = body.toLowerCase();
 
-                    // Randomly select a response from the appropriate array
-                    const randomResponse = responses[key][Math.floor(Math.random() * responses[key].length)];
-
-                    var msg = {
-                        body: randomResponse.replace("naam", userName),
-                    };
-                    api.sendMessage(msg, threadID, messageID);
-                    break;  // Exit the loop once a match is found
-                } catch (error) {
-                    console.error(`Failed to fetch user info for senderID: ${senderID}`, error);
+    for (const key of keys) {
+        // Check if the lowercase message body includes the lowercase keyword
+        if (lowerBody.includes(key.toLowerCase())) {
+            try {
+                const userInfo = await api.getUserInfo(senderID);
+                if (!userInfo || !userInfo[senderID] || !userInfo[senderID].name) {
+                    console.error(`User info not found for senderID: ${senderID}`);
+                    return;
                 }
+
+                // Randomly select a response from the appropriate array
+                const randomResponse = responses[key][Math.floor(Math.random() * responses[key].length)];
+
+                var msg = {
+                    body: randomResponse,
+                    mentions: [{
+                        tag: userInfo[senderID].name,
+                        id: senderID
+                    }]
+                };
+                api.sendMessage(msg, threadID, messageID);
+                break;  // Exit the loop once a match is found
+            } catch (error) {
+                console.error(`Failed to fetch user info for senderID: ${senderID}`, error);
             }
         }
     }
+}
 
-    module.exports.run = function({ api, event, client, __GLOBAL }) {
+module.exports.run = function({ api, event, client, __GLOBAL }) {
 
-    }
+}
