@@ -1,13 +1,18 @@
 module.exports = {
-  config: {  name: "emojibot",
-    version: "1.1.1",
-  hasPermssion: 0,
-  credits: "SHANKAR SUMAN", 
-  description: "Just Respond",
-  usePrefix: false,         
-  commandCategory: "no prefix",
-    cooldowns: 5, 
-};
+  config: {
+    name: "emojibot",
+    version: "1.0",
+    credit: "SHANKAR SUMAN",
+    countDown: 5,
+    role: 0,
+    shortDescription: "no-prefix",
+    longDescription: "Bot Will Reply You In Nepali Language",
+    category: "non-prefix",
+    usePrefix: false,
+    guide: {
+      en: "{p}{n}",
+    }
+  },
 
   onStart: async function ({  }) { },
 
