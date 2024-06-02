@@ -7,7 +7,7 @@ module.exports.config = {
     name: "groupLock",
     version: "1.0.0",
     hasPermssion: 2,
-    credits: "SHSNKAR SUMAN",
+    credits: "SHANKAR SUMAN",
     description: "Lock group settings",
     commandCategory: "Group",
     usePrefix: false,
