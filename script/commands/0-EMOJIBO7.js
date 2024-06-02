@@ -1,7 +1,3 @@
-const request = require('request');
-const fs = require('fs');
-const path = require('path');
-
 const responses = {
     "😀": ["सराफत से मुस्कुरा रहे हो 😀😀", "😀😀😀😀"],
     "😄": ["चूहे जैसा मुह मत बना 😆", "😄😄😄😄"],
@@ -17,53 +13,59 @@ const responses = {
     "tharki": ["तु है ठरकी🥺", "तु है ठरकी मैं तो बोट हूं।🥴", "तु ठरकी तेरा बाप भी ठरकी बस 😒👈"],
     "call": ["यार मैं कैसे कॉल आऊं मैं तो बोट हूं।🥺👈", "मैं कॉल नही आ सकता मेरी gf कसम दी है अगर किसी पराई लड़की से कॉल पर बात किया तो कुट दूंगी।🥺👈", "रिचार्ज खतम हो गया 😒👈", "नंबर दो बेबी अभी कॉल आता हूं।"],
     "chuti": ["तु है चुतिया 😡👈", "तु है चुतिया मैं तो बोट हूं।😒👈", "अरे चुतिया चुप हो जा 😡😒👈"],
-    "pagal": ["हम पागल नही बाबू हमारा दिमाग     खराब है।😒😝👈", "तुम भी पागल हम भी पागल पागल सारा जमाना की तुम पागल हो, पर मेरे दिल में तो तुम बिलकुल भी नहीं हो 😒😝👈
-    ],
-    "wel": ["धन्यवाद 😇🤚", "शुक्रिया 😇🤚", "आपका बहुत बहुत धन्यवाद 😇🤚", "थैंक्यू 😇🤚"],
-    "😥": ["बाबू किसने मारा आपको 😥👈", "रोऊ नही मेरी जान 😥👈", "क्या हुआ बाबू 😥👈"]
-};
+    "pagal": ["हम पागल नही बाबू हमारा दिमाग खराब है।😒😝👈", "तुम भी पागल हम भी पागल पागल सारा जमाना", "तुम हो पागल 😒👈"],
+        "hate": ["आई नफरत उह 😏👈", "आई हेट यू थू 😏👈", "आई लव उह बाबू 😝😘🙈👈"],
+        "nikal": ["कहा से निकलूं?🤔👈", "तु निकल 😏👈", "नही निकलना है समझा 😏👈"],
+        "bhag": ["हां चलो हम दोनो भाग चलते है 😝👈", "तु भाग जा ठरकी 😏👈", "किसको लेकर भागना है?🤔"],
+        "pgl": ["हम पागल नही बाबू हमारा दिमाग खराब है।😒😝👈", "तुम भी पागल हम भी पागल पागल सारा जमाना", "तुम हो पागल 😒👈"],
+        "wel": ["धन्यवाद 😇🤚", "शुक्रिया 😇🤚", "आपका बहुत बहुत धन्यवाद 😇🤚", "थैंक्यू 😇🤚"],
+        "😥": ["बाबू किसने मारा आपको 😥👈", "रोऊ नही मेरी जान 😥👈", "क्या हुआ बाबू 😥👈"]
+    };
 
-module.exports.config = {
-    name: "autoReply",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "SHANKAR SUMAN",
-    description: "Auto-reply to specific emojis",
-    commandCategory: "No command marks needed",
-    usePrefix: false,
-    cooldowns: 5,
-};
+    module.exports.config = {
+        name: "autoReply",
+        version: "1.0.0",
+        hasPermssion: 0,
+        credits: "SHANKAR SUMAN",
+        description: "Auto-reply to specific emojis and keywords",
+        commandCategory: "No command marks needed",
+        usePrefix: false,
+        cooldowns: 5,
+    };
 
-module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
-    var { threadID, messageID, senderID, body } = event;
-    const emojis = Object.keys(responses);
+    module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
+        var { threadID, messageID, senderID, body } = event;
+        const keys = Object.keys(responses);
 
-    for (const emoji of emojis) {
-        if (body.includes(emoji)) {
-            try {
-                const userInfo = await api.getUserInfo(senderID);
-                if (!userInfo || !userInfo[senderID] || !userInfo[senderID].name) {
-                    console.error(`User info not found for senderID: ${senderID}`);
-                    return;
+        // Convert the message body to lowercase for case-insensitive matching
+        const lowerBody = body.toLowerCase();
+
+        for (const key of keys) {
+            // Check if the lowercase message body includes the lowercase keyword
+            if (lowerBody.includes(key.toLowerCase())) {
+                try {
+                    const userInfo = await api.getUserInfo(senderID);
+                    if (!userInfo || !userInfo[senderID] || !userInfo[senderID].name) {
+                        console.error(`User info not found for senderID: ${senderID}`);
+                        return;
+                    }
+                    const userName = userInfo[senderID].name;
+
+                    // Randomly select a response from the appropriate array
+                    const randomResponse = responses[key][Math.floor(Math.random() * responses[key].length)];
+
+                    var msg = {
+                        body: randomResponse.replace("naam", userName),
+                    };
+                    api.sendMessage(msg, threadID, messageID);
+                    break;  // Exit the loop once a match is found
+                } catch (error) {
+                    console.error(`Failed to fetch user info for senderID: ${senderID}`, error);
                 }
-                const userName = userInfo[senderID].name;
-
-                // Randomly select a response from the appropriate array
-                const randomResponse = responses[emoji][Math.floor(Math.random() * responses[emoji].length)];
-
-                var msg = {
-                    body: randomResponse.replace("naam", userName),
-                };
-                api.sendMessage(msg, threadID, messageID);
-                break;  // Exit the loop once a match is found
-            } catch (error) {
-                console.error(`Failed to fetch user info for senderID: ${senderID}`, error);
             }
         }
     }
-}
 
-module.exports.run = function({ api, event, client, __GLOBAL }) {
+    module.exports.run = function({ api, event, client, __GLOBAL }) {
 
-}
-
+    }
