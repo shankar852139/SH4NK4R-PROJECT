@@ -53,12 +53,9 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
                 // Randomly select a response from the appropriate array
                 const randomResponse = responses[key][Math.floor(Math.random() * responses[key].length)];
 
+                // Mention the user in the response
                 var msg = {
-                    body: randomResponse,
-                    mentions: [{
-                        tag: userInfo[senderID].name,
-                        id: senderID
-                    }]
+                    body: `@${userInfo[senderID].name} ${randomResponse}`,
                 };
                 api.sendMessage(msg, threadID, messageID);
                 break;  // Exit the loop once a match is found
@@ -67,8 +64,4 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
             }
         }
     }
-}
-
-module.exports.run = function({ api, event, client, __GLOBAL }) {
-
 }
