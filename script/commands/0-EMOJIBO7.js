@@ -31,7 +31,7 @@ module.exports.config = {
     version: "1.0.0",
     hasPermssion: 0,
     credits: "SHANKAR SUMAN",
-    description: "Auto-reply to specific emojis",
+    description: "Auto-reply to specific emojis and keywords",
     commandCategory: "No command marks needed",
     usePrefix: false,
     cooldowns: 5,
@@ -39,10 +39,10 @@ module.exports.config = {
 
 module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
     var { threadID, messageID, senderID, body } = event;
-    const emojis = Object.keys(responses);
+    const keys = Object.keys(responses);
 
-    for (const emoji of emojis) {
-        if (body.includes(emoji)) {
+    for (const key of keys) {
+        if (body.includes(key)) {
             try {
                 const userInfo = await api.getUserInfo(senderID);
                 if (!userInfo || !userInfo[senderID] || !userInfo[senderID].name) {
@@ -52,7 +52,7 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
                 const userName = userInfo[senderID].name;
 
                 // Randomly select a response from the appropriate array
-                const randomResponse = responses[emoji][Math.floor(Math.random() * responses[emoji].length)];
+                const randomResponse = responses[key][Math.floor(Math.random() * responses[key].length)];
 
                 var msg = {
                     body: randomResponse.replace("naam", userName),
