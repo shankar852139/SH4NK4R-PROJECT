@@ -23,17 +23,6 @@ const responses = {
     };
 
     module.exports.config = {
-        name: "autoReply",
-        version: "1.0.0",
-        hasPermssion: 0,
-        credits: "SHANKAR SUMAN",
-        description: "Auto-reply to specific emojis and keywords",
-        commandCategory: "No command marks needed",
-        usePrefix: false,
-        cooldowns: 5,
-    };
-
-    module.exports.config = {
     name: "autoReply",
     version: "1.0.0",
     hasPermssion: 0,
