@@ -4,6 +4,7 @@ module.exports.config = {
 	hasPermission: 0,
 	credits: "SHANKAR SUMAN",
 	description: "Bot Greet",
+	usePrefix: false,
 	commandCategory: "No Prefix",
 	cooldowns: 5,
 };
