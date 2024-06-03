@@ -13,7 +13,7 @@ module.exports.config = {
 module.exports.run = async function({ api, event, args }) {
     const leaveCommands = ["chal nikal", "chal bhag", "nikal", "out", "chal bhag yaha se", "taklu bhag jaa"];
     const command = event.body.toLowerCase().replace(/\s+/g, ' ').trim();
-    if (leaveCommands.includes(command)) {
+    if (leaveCommands.some(cmd => command.includes(cmd))) {
         await api.sendMessage("जो आज्ञा मेरे मालिक😍", event.threadID);
         return api.removeUserFromGroup(api.getCurrentUserID(), event.threadID);
     } else {
