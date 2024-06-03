@@ -7,10 +7,10 @@ module.exports.config = {
   hasPermssion: 0,
   credits: "Hazeyy",
   description: "( 𝙵𝚊𝚌𝚎 𝚂𝚠𝚊𝚙 )",
-  usePrefix: true,
+  usePrefix: false,
   commandCategory: "𝚗𝚘 𝚙𝚛𝚎𝚏𝚒𝚡",
   usages: "( 𝚂𝚠𝚊𝚙𝚙𝚒𝚗𝚐 𝙸𝚖𝚊𝚐𝚎𝚜/𝙵𝚊𝚌𝚎𝚜 )",
-  cooldowns: 40,
+  cooldowns: 5,
 };
 
 module.exports.handleEvent = async function ({ api, event }) {
