@@ -23,7 +23,7 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
     if (event.body.toLowerCase().startsWith("@Shankar Suman") || 
         event.body.toLowerCase().startsWith("boss") || 
         event.body.toLowerCase().startsWith("Shankar") || 
-        event.body.toLowerCase().startsWith("Shankar") || 
+        event.body.toLowerCase().startsWith("shankar") || 
         event.body.toLowerCase().startsWith("BOSS")) { 
 
         const downloadPath = path.join(__dirname, 'Boss-Jpg-Images.jpg');
