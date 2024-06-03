@@ -1,7 +1,7 @@
 module.exports.config = {
     name: "out",
     version: "1.0.0",
-    hasPermssion: 2,
+    hasPermission: 2,
     credits: "SHANKAR SUMAN",
     description: "Leave the group",
     usePrefix: false,
