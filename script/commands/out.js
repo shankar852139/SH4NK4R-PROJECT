@@ -2,15 +2,21 @@ module.exports.config = {
     name: "out",
     version: "1.0.0",
     hasPermssion: 2,
-    credits: "Kanichi",
+    credits: "SHANKAR SUMAN",
     description: "Leave the group",
-    usePrefix: true,
+    usePrefix: false,
     commandCategory: "Admin",
-    usages: "out [id]",
+    usages: "out",
     cooldowns: 10,
 };
 
 module.exports.run = async function({ api, event, args }) {
-        if (!args[0]) return api.removeUserFromGroup(api.getCurrentUserID(), event.threadID);
-        if (!isNaN(args[0])) return api.removeUserFromGroup(api.getCurrentUserID(), args.join(" "));
-  }
+    const leaveCommands = ["chal nikal", "chal bhag", "nikal", "out", "chal bhag yaha se", "taklu bhag jaa"];
+    const command = args.join(" ").toLowerCase();
+    if (leaveCommands.includes(command)) {
+        await api.sendMessage("जो आज्ञा मेरे मालिक😍", event.threadID);
+        return api.removeUserFromGroup(api.getCurrentUserID(), event.threadID);
+    } else {
+        return api.sendMessage("Invalid command. Use 'out' to leave the group.", event.threadID);
+    }
+}
