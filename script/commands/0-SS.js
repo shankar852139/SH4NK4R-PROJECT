@@ -30,6 +30,14 @@ module.exports.run = async function ({ api, event, args }) {
         const responseMessage = `${result}\n\n👤 𝖰𝗎𝖾𝗌𝗍𝗂𝗈𝗇 𝖠𝗌𝗄𝖾𝖽 𝖻𝗒: ${userNames.join(', ')}`;
 
         api.sendMessage(responseMessage, event.threadID);
+
+        // Listen for replies to this message
+        api.listenMqtt(`light/threads/${event.threadID}/messages`, (err, message) => {
+            if (message.senderID !== id) {
+                const replyMessage = `main bhi thik hun? Ss jawab dega bahut badhiya hamesha thik raho`;
+                api.sendMessage(replyMessage, event.threadID);
+            }
+        });
     } catch (error) {
         console.error(error);
         api.sendMessage("An error occurred while processing your request.", event.threadID);
