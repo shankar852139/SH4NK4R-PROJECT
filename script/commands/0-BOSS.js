@@ -19,12 +19,11 @@ const message = "🥰𝗕𝗢𝗦𝗦 𝗜𝗦 𝗛𝗘𝗥𝗘❤️";
 
 module.exports.handleEvent = async function({ api, event, client, Users, __GLOBAL }) {
     var { threadID, messageID } = event;
+    const lowerCaseMessage = event.body.toLowerCase();
 
-    if (event.body.toLowerCase().startsWith("@Shankar Suman") || 
-        event.body.toLowerCase().startsWith("boss") || 
-        event.body.toLowerCase().startsWith("Shankar") || 
-        event.body.toLowerCase().startsWith("shankar") || 
-        event.body.toLowerCase().startsWith("BOSS")) { 
+    if (lowerCaseMessage.startsWith("@shankar suman") || 
+        lowerCaseMessage.startsWith("boss") || 
+        lowerCaseMessage.startsWith("shankar")) { 
 
         const downloadPath = path.join(__dirname, 'Boss-Jpg-Images.jpg');
 
@@ -43,3 +42,4 @@ module.exports.handleEvent = async function({ api, event, client, Users, __GLOBA
 module.exports.run = function({ api, event, client, __GLOBAL }) {
 
 }
+
