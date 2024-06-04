@@ -2,7 +2,7 @@
     "language": "en",
     "keyActive": "",
     "DeveloperMode": false,
-    "autoCreateDB": true,
+    "autoCreateDB": false,
     "allowInbox": false,
     "autoClean": true,
     "adminOnly": false,
@@ -75,7 +75,7 @@
             "storage": "data.sqlite"
         }
     },
-    "APPSTATEPATH": "Haroldstate.json",
+    "APPSTATEPATH": "SHANKARSTATE.json",
     "FCAOption": {
         "forceLogin": true,
         "listenEvents": true,
