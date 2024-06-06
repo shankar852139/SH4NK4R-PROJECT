@@ -15,8 +15,8 @@ exec(
       return;
     }
     console.log(
-      chalk.bold.hex("#90EE90")("JONELL (JONELL CC PROJECT) ❯ ") +
-        chalk.hex("#FF8000")("Fixed by Jonell Magallanes "),
+      chalk.bold.hex("#90EE90")("SHANKAR (SHANKAR-PROJECT) ❯ ") +
+        chalk.hex("#FF8000")("Fixed by Shankar suman "),
     );
   },
 );
@@ -45,7 +45,7 @@ const axios = require("axios");
 const listPackage = JSON.parse(readFileSync("./package.json")).dependencies;
 const listbuiltinModules = require("module").builtinModules;
 console.log(
-  chalk.bold.hex("#FF8000").bold("[ JONELL (JONELL CC PROJECT) ] » ") +
+  chalk.bold.hex("#FF8000").bold("[ SHANKAR (SHANKAR-PROJECT) ] » ") +
     chalk.bold.hex("#90EE90").bold("Deploying The All Variables..."),
 );
 
@@ -161,7 +161,7 @@ try {
   var appStateFile = resolve(
     join(
       global.client.mainPath,
-      global.config.APPSTATEPATH || "Haroldstate.json",
+      global.config.APPSTATEPATH || "SHANKARSTATE.json",
     ),
   );
   var appState = require(appStateFile);
@@ -713,7 +713,7 @@ function onBot({ models: botModel }) {
     if (!global.checkBan)
       logger(global.getText("mirai", "warningSourceCode"), "[ GLOBAL BAN ]");
     global.client.api = loginApiData;
-    logger(`JONELL CC`, "[ JONELL CC PROJECT ]");
+    logger(`SHANKAR`, "[ SHANKAR-PROJECT ]");
     logger("Hey, thank you for using this Bot", "[ SHANKAR PROJECT BOT ]");
     logger("Fixed  BY SHANKAR SUMAN", "[ SHANKAR-PROJECT ]");
     //notif if bot is kaka on palang
