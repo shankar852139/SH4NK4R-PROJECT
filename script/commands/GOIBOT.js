@@ -18,14 +18,13 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
   let yan = event.body ? event.body.toLowerCase() : '';
 
-  if (yan.indexOf("bot") >= 0 ||
-      yan.indexOf("tak") >= 0 ||
-      yan.indexOf("टकलू") >= 0) {
+  if (yan.indexOf("bot") >= 0 || yan.indexOf("tak") >= 0 || yan.indexOf("टकलू") >= 0) {
     console.log("Trigger word detected, proceeding...");
+
     api.setMessageReaction("🤖", event.messageID, (err) => {
       if (err) console.error("Error setting message reaction:", err);
     }, true);
-    
+
     api.sendTypingIndicator(event.threadID, true);
 
     let userH = event.senderID;
@@ -38,11 +37,11 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
       console.log("User Info:", userInfo);
 
-      let rand = userGender === 2 ? femaleReplies[Math.floor(Math.random() * femaleReplies.length)] 
+      let rand = userGender === 2 ? femaleReplies[Math.floor(Math.random() * femaleReplies.length)]
                                   : maleReplies[Math.floor(Math.random() * maleReplies.length)];
 
       var msg = {
-        body: "@" + userName + ", " + rand, 
+        body: "@" + userName + ", " + rand,
         mentions: [{
           tag: "@" + userName,
           id: userH
@@ -51,13 +50,16 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
       setTimeout(function() {
         console.log("Sending message:", msg);
-        api.sendMessage(msg, threadID, messageID, (err) => {
+        api.sendMessage(msg, threadID, (err) => {
           if (err) console.error("Error sending message:", err);
+          else console.log("Message sent successfully");
         });
       }, 100);
     } catch (err) {
       console.error("Error retrieving user info or sending message:", err);
     }
+  } else {
+    console.log("No trigger word found in message:", event.body);
   }
 };
 
