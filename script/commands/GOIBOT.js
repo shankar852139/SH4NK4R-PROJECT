@@ -38,10 +38,15 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
       if (userInfo && userInfo.name && userInfo.gender !== undefined) {
         userName = userInfo.name;
         userGender = userInfo.gender;
+      } else {
+        console.log("User Info fields missing or undefined");
       }
     } catch (err) {
       console.error("Error retrieving user info:", err);
     }
+
+    console.log("Final UserName:", userName);
+    console.log("Final UserGender:", userGender);
 
     // Gender-specific responses
     var maleReplies = ["अरे तु साइड हो मेको लड़कियों से बात करने दे"];
