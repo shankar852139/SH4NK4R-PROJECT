@@ -10,7 +10,7 @@ module.exports.config = {
   cooldowns: 2,
 };
 
-module.exports.handleEvent = async function ({ api, event }) {
+module.exports.handleEvent = async function ({ api, event, Users }) {
   var { threadID, messageID, senderID, body } = event;
 
   // Ignore messages from the bot itself
@@ -28,9 +28,33 @@ module.exports.handleEvent = async function ({ api, event }) {
 
     api.sendTypingIndicator(threadID, true);
 
-    // Send a simple response
+    // Default response if user information is not available
+    let userInfo = { name: "User", gender: 1 };
+
+    try {
+      // Try to get user information from Users module
+      userInfo = await Users.getUserInfo(senderID);
+      console.log("User Info:", userInfo);
+    } catch (err) {
+      console.error("Error retrieving user info:", err);
+    }
+
+    const userName = userInfo.name;
+    const userGender = userInfo.gender;
+
+    // Gender-specific responses
+    var maleReplies = ["अरे तु साइड हो मेको लड़कियों से बात करने दे"];
+    var femaleReplies = ["हेल्लो मेरी जान कैसे हो बेबी"];
+
+    let rand = userGender === 2 ? femaleReplies[Math.floor(Math.random() * femaleReplies.length)]
+                                : maleReplies[Math.floor(Math.random() * maleReplies.length)];
+
     var msg = {
-      body: "Hello! This is a test response."
+      body: "@" + userName + ", " + rand,
+      mentions: [{
+        tag: "@" + userName,
+        id: senderID
+      }]
     };
 
     setTimeout(function() {
@@ -39,7 +63,7 @@ module.exports.handleEvent = async function ({ api, event }) {
         if (err) {
           console.error("Error sending message:", err);
         } else {
-          console.log("Test message sent successfully");
+          console.log("Message sent successfully");
         }
       });
     }, 100);
