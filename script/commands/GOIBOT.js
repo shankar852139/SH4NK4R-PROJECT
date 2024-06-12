@@ -28,19 +28,20 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
     api.sendTypingIndicator(threadID, true);
 
-    // Default response if user information is not available
-    let userInfo = { name: "User", gender: 1 };
+    let userName = "User"; // Default user name
+    let userGender = 1; // Default gender (male)
 
     try {
       // Try to get user information from Users module
-      userInfo = await Users.getUserInfo(senderID);
-      console.log("User Info:", userInfo);
+      const userInfo = await Users.getUserInfo(senderID);
+      console.log("User Info Retrieved:", userInfo);
+      if (userInfo && userInfo.name && userInfo.gender !== undefined) {
+        userName = userInfo.name;
+        userGender = userInfo.gender;
+      }
     } catch (err) {
       console.error("Error retrieving user info:", err);
     }
-
-    const userName = userInfo.name;
-    const userGender = userInfo.gender;
 
     // Gender-specific responses
     var maleReplies = ["अरे तु साइड हो मेको लड़कियों से बात करने दे"];
