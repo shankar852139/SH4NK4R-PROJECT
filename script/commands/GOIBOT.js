@@ -20,31 +20,44 @@ module.exports.handleEvent = async function ({ api, event, Users }) {
 
   if (yan.indexOf("bot") >= 0 ||
       yan.indexOf("tak") >= 0 ||
-    yan.indexOf("टकलू") >= 0) {
-    api.setMessageReaction("🤖", event.messageID, (err) => {}, true);
+      yan.indexOf("टकलू") >= 0) {
+    console.log("Trigger word detected, proceeding...");
+    api.setMessageReaction("🤖", event.messageID, (err) => {
+      if (err) console.error("Error setting message reaction:", err);
+    }, true);
+    
     api.sendTypingIndicator(event.threadID, true);
 
     let userH = event.senderID;
     if (event.senderID == api.getCurrentUserID()) return;
 
-    const userInfo = await Users.getUserInfo(userH);
-    const userName = global.data.userName.get(userH) || userInfo.name;
-    const userGender = userInfo.gender;
+    try {
+      const userInfo = await Users.getUserInfo(userH);
+      const userName = global.data.userName.get(userH) || userInfo.name;
+      const userGender = userInfo.gender;
 
-    let rand = userGender === 2 ? femaleReplies[Math.floor(Math.random() * femaleReplies.length)] 
-                                : maleReplies[Math.floor(Math.random() * maleReplies.length)];
+      console.log("User Info:", userInfo);
 
-    var msg = {
-      body: "@" + userName + ", " + rand, 
-      mentions: [{
-        tag: "@" + userName,
-        id: userH
-      }]
-    };
+      let rand = userGender === 2 ? femaleReplies[Math.floor(Math.random() * femaleReplies.length)] 
+                                  : maleReplies[Math.floor(Math.random() * maleReplies.length)];
 
-    setTimeout(function() {
-      return api.sendMessage(msg, threadID, messageID);
-    }, 100);
+      var msg = {
+        body: "@" + userName + ", " + rand, 
+        mentions: [{
+          tag: "@" + userName,
+          id: userH
+        }]
+      };
+
+      setTimeout(function() {
+        console.log("Sending message:", msg);
+        api.sendMessage(msg, threadID, messageID, (err) => {
+          if (err) console.error("Error sending message:", err);
+        });
+      }, 100);
+    } catch (err) {
+      console.error("Error retrieving user info or sending message:", err);
+    }
   }
 };
 
