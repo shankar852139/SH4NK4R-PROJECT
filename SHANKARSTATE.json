@@ -1,137 +1,66 @@
-[
-    {
-        "key": "dbln",
-        "value": "%7B%22100094902953292%22%3A%22GV2yZ43Q%22%2C%22100095468414221%22%3A%22z8WNvd7c%22%2C%22100093583814025%22%3A%22WBxhClmw%22%2C%2261550068745926%22%3A%224jNx5iIl%22%2C%2261550578528441%22%3A%22XSR4kl81%22%2C%2261550545565961%22%3A%22RsRudEPn%22%2C%2261550588313772%22%3A%2256lQEM5D%22%2C%2261550309684164%22%3A%22Z5BY9b4j%22%2C%2261550506843378%22%3A%22jueoNggT%22%2C%2261550742091396%22%3A%22NshHgPhX%22%2C%2261550649195438%22%3A%22vukPuQI3%22%2C%2261550855287224%22%3A%22VRLOYN3H%22%2C%2261551906069685%22%3A%227n072SL9%22%2C%22100094002294717%22%3A%22o6efX8D0%22%2C%22100092390422644%22%3A%229FaFYriQ%22%2C%2261554715797122%22%3A%22ujVCpKyE%22%2C%2261556310622530%22%3A%22Vm1LGB7r%22%2C%2261552388502836%22%3A%22brn10fkm%22%2C%2261556937264193%22%3A%22RhwkGKJn%22%7D",
-        "domain": "facebook.com",
-        "path": "/login/device-based/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "datr",
-        "value": "ykBKZQT-WXnqI-F0PAOCDj11",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "sb",
-        "value": "ykBKZb6ExcLO1yJ3Ny8GBAr8",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "ps_n",
-        "value": "1",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "ps_l",
-        "value": "1",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "vpd",
-        "value": "v1%3B682x393x2.75",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "fr",
-        "value": "0NBTJxeCYWwT85GWW.AWUIU5Xf0fh42X72EOmtkIsru-8.BlSkDK..AAA.0.0.BmZm0J.AWXfvtdCMIk",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "c_user",
-        "value": "61556937264193",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "xs",
-        "value": "5%3A9RajvI1l6na5oQ%3A2%3A1717988617%3A-1%3A16343",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "m_page_voice",
-        "value": "61556937264193",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "dpr",
-        "value": "2.75",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "wd",
-        "value": "393x682",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "locale",
-        "value": "gu_IN",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "fbl_st",
-        "value": "101025177%3BT%3A28637011",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
-    },
-    {
-        "key": "wl_cbv",
-        "value": "v2%3Bclient_version%3A2528%3Btimestamp%3A1718220713",
-        "domain": "facebook.com",
-        "path": "/",
-        "hostOnly": false,
-        "creation": "2024-06-12T19:32:05.879Z",
-        "lastAccessed": "2024-06-12T19:32:05.879Z"
+module.exports.config = {
+  name: "goibot",
+  version: "1.0.1",
+  hasPermission: 0,
+  credits: "SHANKAR",
+  description: "Noprefix",
+  commandCategory: "noPrefix",
+  usePrefix: false,
+  usages: "[]",
+  cooldowns: 2,
+};
+
+module.exports.handleEvent = async function ({ api, event, Users }) {
+  var { threadID, messageID } = event;
+
+  var maleReplies = ["अरे तु साइड हो मेको लड़कियों से बात करने दे"];
+  var femaleReplies = ["हेल्लो मेरी जान कैसे हो बेबी"];
+
+  let yan = event.body ? event.body.toLowerCase() : '';
+
+  if (yan.indexOf("bot") >= 0 || yan.indexOf("tak") >= 0 || yan.indexOf("टकलू") >= 0) {
+    console.log("Trigger word detected, proceeding...");
+
+    api.setMessageReaction("🤖", event.messageID, (err) => {
+      if (err) console.error("Error setting message reaction:", err);
+    }, true);
+
+    api.sendTypingIndicator(event.threadID, true);
+
+    let userH = event.senderID;
+    if (event.senderID == api.getCurrentUserID()) return;
+
+    try {
+      const userInfo = await Users.getUserInfo(userH);
+      const userName = global.data.userName.get(userH) || userInfo.name;
+      const userGender = userInfo.gender;
+
+      console.log("User Info:", userInfo);
+
+      let rand = userGender === 2 ? femaleReplies[Math.floor(Math.random() * femaleReplies.length)]
+                                  : maleReplies[Math.floor(Math.random() * maleReplies.length)];
+
+      var msg = {
+        body: "@" + userName + ", " + rand,
+        mentions: [{
+          tag: "@" + userName,
+          id: userH
+        }]
+      };
+
+      setTimeout(function() {
+        console.log("Sending message:", msg);
+        api.sendMessage(msg, threadID, (err) => {
+          if (err) console.error("Error sending message:", err);
+          else console.log("Message sent successfully");
+        });
+      }, 100);
+    } catch (err) {
+      console.error("Error retrieving user info or sending message:", err);
     }
-]
+  } else {
+    console.log("No trigger word found in message:", event.body);
+  }
+};
+
+module.exports.run = async function ({ api, event, __GLOBAL }) {};
