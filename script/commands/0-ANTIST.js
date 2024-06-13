@@ -1,7 +1,7 @@
 module.exports.config = {
   name: "antist",
   credits: "SHANKAR",
-  hasPermssion: 1, // Yahaan permissibility 1 se badal diya gaya hai
+  hasPermssion: 1, // Only bot admin can use this command
   usePrefix: false,
   dependencies: {
     "imgbb-uploader": "",
@@ -20,39 +20,36 @@ module.exports.run = async ({ api, event, args, Threads }) => {
     const { threadID, messageID, senderID } = event;
     const threadInfo = await api.getThreadInfo(threadID);
     
-    // Check karein ki sender bot admin hai ya nahi
-    if (!threadInfo.adminIDs.includes(senderID)) {
+    // Check if sender is bot admin
+    if (!threadInfo.adminIDs.some(admin => admin.id == senderID)) {
       return api.sendMessage("Aapko sirf bot admin hi is command ko use karne ki permission hai.", threadID, messageID);
     }
     
-    if (!await global.modelAntiSt.findOne({ where: { threadID } }))
+    let threadData = await global.modelAntiSt.findOne({ where: { threadID } });
+    if (!threadData) {
       await global.modelAntiSt.create({ threadID, data: {} });
+      threadData = { data: {} };
+    }
 
-    const data = (await global.modelAntiSt.findOne({ where: { threadID } })).data;
+    const data = threadData.data;
     if (!data.hasOwnProperty("antist")) {
       data.antist = {};
-      await global.modelAntiSt.findOneAndUpdate({ threadID }, { data });
     }
     if (!data.hasOwnProperty("antist_info")) {
       data.antist_info = {};
-      await global.modelAntiSt.findOneAndUpdate({ threadID }, { data });
     }
 
     const setting = args[0]?.toLowerCase();
     const _switch = args[1]?.toLowerCase();
-    
+
     switch (setting) {
       case 'nickname': {
-        if (_switch == "on")
-          data.antist.nickname = true;
-        else if (_switch == "off")
-          data.antist.nickname = false;
-        else
-          data.antist.nickname = !data.antist.nickname;
+        if (_switch === "on") data.antist.nickname = true;
+        else if (_switch === "off") data.antist.nickname = false;
+        else data.antist.nickname = !data.antist.nickname;
 
-        if (data.antist.nickname === true) {
-          const _info = data.antist_info.nicknames ? data.antist_info : (await api.getThreadInfo(threadID) || {});
-          const { nicknames } = _info;
+        if (data.antist.nickname) {
+          const { nicknames } = await api.getThreadInfo(threadID) || {};
           if (!nicknames) return api.sendMessage("[ MODE ] → Command execute karte samay error aayi", threadID);
           data.antist_info.nicknames = nicknames;
         } else {
@@ -61,20 +58,16 @@ module.exports.run = async ({ api, event, args, Threads }) => {
         break;
       }
       case 'boximage': {
-        if (_switch == "on")
-          data.antist.boximage = true;
-        else if (_switch == "off")
-          data.antist.boximage = false;
-        else
-          data.antist.boximage = !(isBoolean(data.antist.boximage) ? data.antist.boximage : false);
+        if (_switch === "on") data.antist.boximage = true;
+        else if (_switch === "off") data.antist.boximage = false;
+        else data.antist.boximage = !data.antist.boximage;
 
-        if (data.antist.boximage == true) {
+        if (data.antist.boximage) {
           const fs = global.nodemodule["fs"];
           const axios = global.nodemodule["axios"];
           const uploadIMG = global.nodemodule["imgbb-uploader"];
 
-          const _info = data.antist_info.imageSrc ? data.antist_info : (await api.getThreadInfo(threadID) || {});
-          const { imageSrc } = _info;
+          const { imageSrc } = await api.getThreadInfo(threadID) || {};
           if (!imageSrc) return api.sendMessage("Aapke group me koi image nahi hai...", threadID);
           const imageStream = (await axios.get(imageSrc, { responseType: 'arraybuffer' })).data;
           const pathToImage = __dirname + `/cache/imgbb_antist_${Date.now()}.png`;
@@ -87,56 +80,39 @@ module.exports.run = async ({ api, event, args, Threads }) => {
         } else {
           data.antist_info.imageSrc = null;
         }
-
         break;
       }
       case 'boxname': {
-        if (_switch == "on")
-          data.antist.boxname = true;
-        else if (_switch == "off")
-          data.antist.boxname = false;
-        else
-          data.antist.boxname = !(isBoolean(data.antist.boxname) ? data.antist.boxname : false);
+        if (_switch === "on") data.antist.boxname = true;
+        else if (_switch === "off") data.antist.boxname = false;
+        else data.antist.boxname = !data.antist.boxname;
 
-        if (data.antist.boxname === true) {
-          const _info = data.antist_info.name ? data.antist_info : (await api.getThreadInfo(threadID) || {});
-          const { name } = _info;
+        if (data.antist.boxname) {
+          const { name } = await api.getThreadInfo(threadID) || {};
           if (!name) return api.sendMessage("Group ka koi naam nahi hai", threadID);
           data.antist_info.name = name;
         } else {
           data.antist_info.name = null;
         }
-
         break;
       }
       case "theme": {
-        if (_switch == "on")
-          data.antist.theme = true;
-        else if (_switch == "off")
-          data.antist.theme = false;
-        else
-          data.antist.theme = !(isBoolean(data.antist.theme) ? data.antist.theme : false);
+        if (_switch === "on") data.antist.theme = true;
+        else if (_switch === "off") data.antist.theme = false;
+        else data.antist.theme = !data.antist.theme;
 
-        if (!global.client.antistTheme)
-          global.client.antistTheme = {};
-        if (data.antist.theme === true)
+        if (!global.client.antistTheme) global.client.antistTheme = {};
+        if (data.antist.theme) {
           return api.sendMessage('Please group settings me jaake ek theme select karein jo default theme banegi', threadID, (err, info) => {
+            if (err) console.log(err);
             global.client.antistTheme[threadID] = {
               threadID,
               messageID: info.messageID,
               author: senderID,
               run: async function (themeID, accessibility_label) {
                 delete global.client.antistTheme[threadID];
-                const data = (await global.modelAntiSt.findOne({ where: { threadID } })).data;
-                if (!data.hasOwnProperty("antist")) {
-                  data.antist = {};
-                  await global.modelAntiSt.findOneAndUpdate({ threadID }, { data });
-                }
-                if (!data.hasOwnProperty("antist_info")) {
-                  data.antist_info = {};
-                  await global.modelAntiSt.findOneAndUpdate({ threadID }, { data });
-                }
-
+                const updatedData = await global.modelAntiSt.findOne({ where: { threadID } });
+                const data = updatedData.data;
                 data.antist.theme = true;
                 data.antist_info.themeID = themeID;
                 api.sendMessage('Default theme saved as: ' + accessibility_label, threadID);
@@ -144,27 +120,22 @@ module.exports.run = async ({ api, event, args, Threads }) => {
               }
             };
           });
+        }
         break;
       }
       case "emoji": {
-        if (_switch == "on")
-          data.antist.emoji = true;
-        else if (_switch == "off")
-          data.antist.emoji = false;
-        else
-          data.antist.emoji = !(isBoolean(data.antist.emoji) ? data.antist.emoji : false);
+        if (_switch === "on") data.antist.emoji = true;
+        else if (_switch === "off") data.antist.emoji = false;
+        else data.antist.emoji = !data.antist.emoji;
 
-        if (data.antist.emoji === true) {
-          const _info = data.antist_info.emoji ? data.antist_info : (await api.getThreadInfo(threadID) || {});
-          const { emoji } = _info;
+        if (data.antist.emoji) {
+          const { emoji } = await api.getThreadInfo(threadID) || {};
           data.antist_info.emoji = emoji;
         } else {
           data.antist_info.emoji = null;
         }
-
         break;
       }
-
       default:
         return api.sendMessage(`====== [ GUIDE ] ======
 \n\n━━━━━━━━━━━━━━━━\n\n- anti boxname: Enable/Disable prohibiting changing the group name\n- anti boximage: Enable/Disable prohibiting changing the group image\n- anti nickname: Enable/Disable prohibiting changing member nicknames\n- anti emoji: Enable/Disable prohibiting changing the group icon\n- anti theme: Enable/Disable prohibiting changing the group theme`, threadID);
