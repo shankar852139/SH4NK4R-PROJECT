@@ -71,6 +71,7 @@ module.exports.config = {
   description: "lấy url imgur trên message",
   credits: "Sam & API Imgur",
   commandCategory: "Phương Tiện",
+  usePrefix: false,
   usages: "[reply]",
   cooldowns: 5
 }
