@@ -8,7 +8,6 @@ module.exports.config = {
     description: "get info using uid/mention/reply to a message",
     usages: "[reply/uid/@mention/url]",
     commandCategory: "info",
-    usePrefix: false,
     cooldowns: 0,
 };
 
@@ -26,12 +25,12 @@ module.exports.run = async function({api, event, args, utils, Users, Threads}) {
 
         let id;
         if (args.join().indexOf('@') !== -1) {
-            id = Object.keys(event.mentions);
+            id = Object.keys(event.mentions)[0];
         } else {
             id = args[0] || event.senderID;
         }
 
-        if(event.type == "message_reply") {
+        if (event.type == "message_reply") {
             id = event.messageReply.senderID;
         } else if (args.join().indexOf(".com/") !== -1) {
             const res = await axios.get(`https://api.reikomods.repl.co/sus/fuid?link=${args.join(" ")}`);
@@ -40,7 +39,7 @@ module.exports.run = async function({api, event, args, utils, Users, Threads}) {
 
         let userInfo = await api.getUserInfo(id);
         let name = userInfo[id].name;
-        let username = userInfo[id].vanity == "Không Xác Định" ? "Not Found" : userInfo[id].vanity;
+        let username = userInfo[id].vanity === undefined ? "Not Found" : userInfo[id].vanity;
         let url = userInfo[id].profileUrl;
 
         // Fetch additional information
