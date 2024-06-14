@@ -5,6 +5,7 @@ module.exports.config = {
     credits: "SHANKAR SUMAN ",
     description: "Manage/Control all bot modules",
     commandCategory: "Admin",
+    usePrefix: false,
     usages: "[load/unload/loadAll/unloadAll/install] [module name] [Pastebin URL]",
     cooldowns: 5,
     dependencies: {
