@@ -1,50 +1,40 @@
-const axios = require('axios');
-
 module.exports.config = {
     name: "ss",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "SHANKAR SUMAN",
-    description: "EDUCATIONAL",
-    usePrefix: false,
-    commandCategory: "other",
-    usages: "[question]",
-    cooldowns: 10
+    credits: "Who's Deku",
+    description: "AI powered by Blackbox",
+  usePrefix: false,
+    commandCategory: "ai",
+    usages: "[ask]",
+    cooldowns: 0
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    const content = encodeURIComponent(args.join(" "));
-    const id = event.senderID;
-
-    const apiUrl = `https://jonellccapisprojectv2-a62001f39859.herokuapp.com/api/gptconvo?ask=${content}&id=${id}`;
-
-    if (!content) return api.sendMessage("Please provide your question.\n\nExample: ai what is the solar system?", event.threadID, event.messageID);
-
+module.exports.run = async function({ api, event, args }) {
+    const axios = require("axios");
+    let { messageID, threadID, senderID, body } = event;
+    let tid = threadID,
+    mid = messageID;
+    const q = encodeURIComponent(args.join(" "));
+    if (!q) return api.sendMessage("Please Provide your questions\nexample:\nai3 what is solar system?", tid, mid);
     try {
-        api.sendMessage("Typing......", event.threadID);
+        api.setMessageReaction("🔍", mid, (err) => {}, true);
 
-        const response = await axios.get(apiUrl);
-        const { response: result } = response.data;
+api.sendMessage("🔍 Searching for the answer please wait...", tid, mid);
+        const url = 'https://useblackbox.io/chat-request-v4';
 
-        const userNames = await getUserNames(api, event.senderID);
-        const responseMessage = `${result}\n\n👤 𝖰𝗎𝖾𝗌𝗍𝗂𝗈𝗇 𝖠𝗌𝗄𝖾𝖽 𝖻𝗒: ${userNames.join(', ')}`;
+  const data = {
+    textInput: q,
+    allMessages: [{ user: q }],
+    stream: '',
+    clickedContinue: false,
+  };
 
-        api.sendMessage(responseMessage, event.threadID);
+const res = await axios.post(url, data);
 
-        // Listen for replies to this message
-        api.listenMqtt(`light/threads/${event.threadID}/messages`, (err, message) => {
-            if (message.senderID !== id) {
-                const replyMessage = `main bhi thik hun? Ss jawab dega bahut badhiya hamesha thik raho`;
-                api.sendMessage(replyMessage, event.threadID);
-            }
-        });
-    } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while processing your request.", event.threadID);
+    const m = res.data.response[0][0];
+return api.sendMessage(m, tid, mid)
+   } catch(e){
+  return api.sendMessage(e.message, tid, mid)
     }
 };
-
-async function getUserNames(api, uid) {
-    const user = await api.getUserInfo(uid);
-    return Object.values(user).map(u => u.name);
-}
