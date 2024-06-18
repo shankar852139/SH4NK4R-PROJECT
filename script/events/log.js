@@ -3,7 +3,7 @@ module.exports.config = {
 	eventType: ["log:unsubscribe","log:subscribe","log:thread-name"],
 	version: "1.0.0",
 	credits: "Mirai Team",
-	description: "Ghi lại thông báo các hoạt đông của bot!",
+	description: "Record bot activity notifications!",
     envConfig: {
         enable: true
     }
@@ -12,12 +12,11 @@ module.exports.config = {
 module.exports.run = async function({ api, event, Threads }) {
     const logger = require("../../utils/log");
     if (!global.configModule[this.config.name].enable) return;
-  let { threadName, participantIDs, imageSrc } = await api.getThreadInfo(event.threadID);
-  const moment = require('moment-timezone');
-  var deku = moment.tz("Asia/Kolkata").format("MM/DD/YYYY");
-  var o = moment.tz("Asia/Kolkata").format("HH:mm:ss");
-  const res = await api.getUserInfoV2(event.author);
-    var formReport =  `•——Bot Notification——•\n\nDate Now: ${deku}\n\n»Group ID: ${event.threadID}\n\n»Group Name: ${threadName}\n\nAuthor Facebook: https://facebook.com/${event.author}` +"\n\n»Action: {task} " + `at time ${o}` +`\n\n» Action created by: ${res.name}\n\n»This group have ${participantIDs.length} members`,
+    var formReport =  "=== Bot Notification ===" +
+                        "\n\n» Thread ID: " + event.threadID +
+                        "\n» Action: {task}" +
+                        "\n» Action created by user ID: " + event.author +
+                        "\n» " + Date.now() +" «",
         task = "";
     switch (event.logMessageType) {
         case "log:thread-name": {
@@ -27,11 +26,11 @@ module.exports.run = async function({ api, event, Threads }) {
             break;
         }
         case "log:subscribe": {
-            if (event.logMessageData.addedParticipants.some(i => i.userFbId == api.getCurrentUserID())) task = "User added bot to a new group";
+            if (event.logMessageData.addedParticipants.some(i => i.userFbId == api.getCurrentUserID())) task = "The user added the bot to a new group!";
             break;
         }
         case "log:unsubscribe": {
-            if (event.logMessageData.leftParticipantFbId== api.getCurrentUserID()) task = "User kicked bot out of group"
+            if (event.logMessageData.leftParticipantFbId== api.getCurrentUserID()) task = "The user kicked the bot out of the group!"
             break;
         }
         default: 
