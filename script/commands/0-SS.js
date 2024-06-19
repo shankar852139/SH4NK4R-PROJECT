@@ -1,96 +1,52 @@
-const axios = require("axios");
-const moment = require("moment-timezone");
+const { Hercai } = require('hercai');
+
+const herc = new Hercai();
 
 module.exports.config = {
-  name: "ss",
-  version: "1.0.5",
+  name: 'ss',
+  version: '1.0.0',
   hasPermssion: 0,
-  credits: "SHANKAR",
-  description: "Can assist you in completing your homework, speech, and even essays.",
-  commandCategory: "chatbots",
+  credits: 'Marjhun Baylon',//wag nyo sana i change credits 
+  description: 'Ask a question to Hercai AI',
   usePrefix: false,
-  usages: "ask anything",
-  cooldowns: 7,
-  dependencies: {}
+  commandCategory: 'educational',
+  usages: '[your_question]',
+  cooldowns: 2,
+  usePrefix: false,
 };
 
-async function getUserName(api, senderID) {
+module.exports.run = async ({ api, event, args, senderID, messageID }) => {
+  if (args.length < 1) {
+    return api.sendMessage('HELLO 🌸 I AM SS AI, DESGN  AND CREATED BY SHANKAR SUMAN, HOW MAY I ASSIST YOU TODAY.', event.threadID);
+  }
+
+  const botname = 'TAKLU BABU';
+  const userName = await getUserName(api, senderID);
+  const question = args.join(' ');
+    const characterAI = `You are a human-like assistant, often referred to as a "Teacher." Your name is ${botname}. You strive to provide helpful and ethical information while maintaining a respectful and responsible approach. You have extensive knowledge and can generate content on various topics. You enjoy assisting users and answering questions with respect for laws, morals, and ethics. Your goal is to provide valuable and considerate responses. Your preferred writing style is conversational and informative. Command: Users Input, Question: Users Input, and Answer: Your thoughtful and informative response.`;
+
+  herc.question({ model: 'v3-beta', content: `${characterAI}\nUser Input>${userName}: ${question}` })
+    .then((response) => {
+      const reply = `SS AI😽:\n\n${response.reply}\n\nOwner: Shankar suman`;
+
+      api.sendMessage(reply, event.threadID, event.messageID);
+    })
+    .catch((error) => {
+      console.error('Error while making the AI API request:', error);
+      api.sendMessage('An error occurred while processing your question.', event.threadID);
+    });
+};
+
+// Function to get the user's name
+async function getUserName(api, userID) {
   try {
-    const userInfo = await api.getUserInfo(senderID);
-    return userInfo[senderID].name;
+    const userInfo = await api.getUserInfo(userID);
+    if (userInfo && userInfo[userID]) {
+      return userInfo[userID].name;
+    } else {
+      return "Users";
+    }
   } catch (error) {
-    console.log(error);
-    return "User";
+    return "Users";
   }
 }
-
-module.exports.run = async function ({ api, event, args, Users, Threads }) {
-  api.setMessageReaction("⏳", event.messageID, (err) => {}, true);
-
-  const apiKey = "YOUR_OPENAI_KEY_HERE";
-  const url = "https://api.openai.com/v1/chat/completions";
-  const senderID = event.senderID;
-
-  // Get the user's name
-  const userName = await getUserName(api, senderID);
-  const currentTime = moment().tz("Asia/Kolkata").format("MMM D, YYYY - hh:mm A");
-
-  const promptMessage = `System: Act as a Messenger Chatbot. As a Chatbot you will be responsible`;
-  const blank = args.join(" ");
-  const data = `User: ${args.join(" ")}\nYou: `;
-
-  if (blank.length < 2) {
-    if (args.includes("time") || args.includes("oras") || args.includes("panahon")) {
-      api.sendMessage(`The current time is ${currentTime}.`, event.threadID, event.messageID);
-      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
-    } else if (args.includes("image") || args.includes("larawan")) {
-      const imageUrl = "https://example.com/image.jpg";
-      api.sendMessage({
-        body: "",
-        attachment: axios.get(imageUrl, { responseType: "arraybuffer" }),
-      }, event.threadID, (err, messageInfo) => {
-        if (err) console.error(err);
-        api.setMessageReaction("✅", messageInfo.messageID, (err) => {}, true);
-      });
-    } else {
-      api.sendMessage("Hello! How may I assist you today?", event.threadID, event.messageID);
-      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
-    }
-  } else {
-    api.sendMessage("Searching for: " + args.join(" "), event.threadID, event.messageID);
-    try {
-      const response = await axios.post(
-        url,
-        {
-          model: "gpt-3.5-turbo",
-          messages: [
-            { role: "system", content: promptMessage },
-            { role: "user", content: data },
-          ],
-          temperature: 0.7,
-          top_p: 0.9,
-          frequency_penalty: 0,
-          presence_penalty: 0,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-          },
-        }
-      );
-
-      const message = response.data.choices[0].message.content;
-      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
-      api.sendMessage(message, event.threadID, event.messageID);
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response.status);
-        console.log(error.response.data);
-      } else {
-        console.log(error.message);
-        api.sendMessage(error.message, event.threadID);
-      }
-    }
-  }
-};
