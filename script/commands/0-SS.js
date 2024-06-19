@@ -1,40 +1,42 @@
+const axios = require('axios');
+
 module.exports.config = {
-    name: "ss",
+    name: "ai",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "Who's Deku",
-    description: "AI powered by Blackbox",
-  usePrefix: false,
-    commandCategory: "ai",
-    usages: "[ask]",
-    cooldowns: 0
+    credits: "Jonell Magallanes",
+    description: "EDUCATIONAL",
+    usePrefix: false,
+    commandCategory: "other",
+    usages: "[question]",
+    cooldowns: 10
 };
 
-module.exports.run = async function({ api, event, args }) {
-    const axios = require("axios");
-    let { messageID, threadID, senderID, body } = event;
-    let tid = threadID,
-    mid = messageID;
-    const q = encodeURIComponent(args.join(" "));
-    if (!q) return api.sendMessage("Please Provide your questions\nexample:\nai3 what is solar system?", tid, mid);
+module.exports.run = async function ({ api, event, args }) {
+    const content = encodeURIComponent(args.join(" "));
+    const id = event.senderID;
+
+    const apiUrl = `https://jonellccapisprojectv2-a62001f39859.herokuapp.com/api/gptconvo?ask=${content}&id=${id}`;
+
+    if (!content) return api.sendMessage("Please provide your question.\n\nExample: ai what is the solar system?", event.threadID, event.messageID);
+
     try {
-        api.setMessageReaction("🔍", mid, (err) => {}, true);
+        api.sendMessage("Typing......", event.threadID);
 
-api.sendMessage("🔍 Searching for the answer please wait...", tid, mid);
-        const url = 'https://useblackbox.io/chat-request-v4';
+        const response = await axios.get(apiUrl);
+        const { response: result } = response.data;
 
-  const data = {
-    textInput: q,
-    allMessages: [{ user: q }],
-    stream: '',
-    clickedContinue: false,
-  };
+        const userNames = await getUserNames(api, event.senderID);
+        const responseMessage = `${result}\n\n👤 𝖰𝗎𝖾𝗌𝗍𝗂𝗈𝗇 𝖠𝗌𝗄𝖾𝖽 𝖻𝗒: ${userNames.join(', ')}`;
 
-const res = await axios.post(url, data);
-
-    const m = res.data.response[0][0];
-return api.sendMessage(m, tid, mid)
-   } catch(e){
-  return api.sendMessage(e.message, tid, mid)
+        api.sendMessage(responseMessage, event.threadID);
+    } catch (error) {
+        console.error(error);
+        api.sendMessage("An error occurred while processing your request.", event.threadID);
     }
 };
+
+async function getUserNames(api, uid) {
+    const user = await api.getUserInfo(uid);
+    return Object.values(user).map(u => u.name);
+}
