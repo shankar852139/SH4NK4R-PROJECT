@@ -1,42 +1,96 @@
-const axios = require('axios');
+const axios = require("axios");
+const moment = require("moment-timezone");
 
 module.exports.config = {
-    name: "ss",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "Jonell Magallanes",
-    description: "EDUCATIONAL",
-    usePrefix: false,
-    commandCategory: "other",
-    usages: "[question]",
-    cooldowns: 10
+  name: "ss",
+  version: "1.0.5",
+  hasPermssion: 0,
+  credits: "SHANKAR",
+  description: "Can assist you in completing your homework, speech, and even essays.",
+  commandCategory: "chatbots",
+  usePrefix: false,
+  usages: "ask anything",
+  cooldowns: 7,
+  dependencies: {}
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    const content = encodeURIComponent(args.join(" "));
-    const id = event.senderID;
-
-    const apiUrl = `https://jonellccapisprojectv2-a62001f39859.herokuapp.com/api/gptconvo?ask=${content}&id=${id}`;
-
-    if (!content) return api.sendMessage("Please provide your question.\n\nExample: ai what is the solar system?", event.threadID, event.messageID);
-
-    try {
-        api.sendMessage("Typing......", event.threadID);
-
-        const response = await axios.get(apiUrl);
-        const { response: result } = response.data;
-
-        const userNames = await getUserNames(api, event.senderID);
-        const responseMessage = `${result}\n\n👤 𝖰𝗎𝖾𝗌𝗍𝗂𝗈𝗇 𝖠𝗌𝗄𝖾𝖽 𝖻𝗒: ${userNames.join(', ')}`;
-
-        api.sendMessage(responseMessage, event.threadID);
-    } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while processing your request.", event.threadID);
-    }
-};
-
-async function getUserNames(api, uid) {
-    const user = await api.getUserInfo(uid);
-    return Object.values(user).map(u => u.name);
+async function getUserName(api, senderID) {
+  try {
+    const userInfo = await api.getUserInfo(senderID);
+    return userInfo[senderID].name;
+  } catch (error) {
+    console.log(error);
+    return "User";
+  }
 }
+
+module.exports.run = async function ({ api, event, args, Users, Threads }) {
+  api.setMessageReaction("⏳", event.messageID, (err) => {}, true);
+
+  const apiKey = "YOUR_OPENAI_KEY_HERE";
+  const url = "https://api.openai.com/v1/chat/completions";
+  const senderID = event.senderID;
+
+  // Get the user's name
+  const userName = await getUserName(api, senderID);
+  const currentTime = moment().tz("Asia/Kolkata").format("MMM D, YYYY - hh:mm A");
+
+  const promptMessage = `System: Act as a Messenger Chatbot. As a Chatbot you will be responsible`;
+  const blank = args.join(" ");
+  const data = `User: ${args.join(" ")}\nYou: `;
+
+  if (blank.length < 2) {
+    if (args.includes("time") || args.includes("oras") || args.includes("panahon")) {
+      api.sendMessage(`The current time is ${currentTime}.`, event.threadID, event.messageID);
+      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
+    } else if (args.includes("image") || args.includes("larawan")) {
+      const imageUrl = "https://example.com/image.jpg";
+      api.sendMessage({
+        body: "",
+        attachment: axios.get(imageUrl, { responseType: "arraybuffer" }),
+      }, event.threadID, (err, messageInfo) => {
+        if (err) console.error(err);
+        api.setMessageReaction("✅", messageInfo.messageID, (err) => {}, true);
+      });
+    } else {
+      api.sendMessage("Hello! How may I assist you today?", event.threadID, event.messageID);
+      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
+    }
+  } else {
+    api.sendMessage("Searching for: " + args.join(" "), event.threadID, event.messageID);
+    try {
+      const response = await axios.post(
+        url,
+        {
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: promptMessage },
+            { role: "user", content: data },
+          ],
+          temperature: 0.7,
+          top_p: 0.9,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+        }
+      );
+
+      const message = response.data.choices[0].message.content;
+      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
+      api.sendMessage(message, event.threadID, event.messageID);
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.status);
+        console.log(error.response.data);
+      } else {
+        console.log(error.message);
+        api.sendMessage(error.message, event.threadID);
+      }
+    }
+  }
+};
