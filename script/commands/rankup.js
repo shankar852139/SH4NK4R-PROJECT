@@ -1,97 +1,159 @@
-const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
-const { promises: fsPromises } = require('fs');
-
-const userDataPath = path.join(__dirname, 'cache', 'userData.json');
-
-// Ensure the cache directory exists
-if (!fs.existsSync(path.join(__dirname, 'cache'))) {
-  fs.mkdirSync(path.join(__dirname, 'cache'));
+const fs = require('fs');
+const cacheDir = path.join(__dirname, 'cache');
+if (fs.existsSync(__dirname + '/script/commands/cache/rankup/rankup.png')) {
+  //fs.unlinkSync('/home/runner/BotPack/script/commands/cache/rankup/rankup.png');
 }
 
-// Ensure the userData.json file exists
-if (!fs.existsSync(userDataPath)) {
-  fs.writeFileSync(userDataPath, JSON.stringify({}));
+if (fs.existsSync(__dirname + '/script/commands/cache/Avtmot.png')) {
+  //fs.unlinkSync(__dirname + '/home/runner/BotPack/script/commands/cache/Avtmot.png');
 }
 
-async function getUserName(api, senderID) {
-  try {
-    const userInfo = await api.getUserInfo(senderID);
-    return userInfo[senderID]?.name || "User";
-  } catch (error) {
-    console.log(error);
-    return "User";
-  }
-}
-
-async function updateRankApi(senderID, name, currentExp, level) {
-  const requiredXp = Math.floor(1000 * Math.pow(level, 2));
-
-  const rankApiUrl = `https://rankupbyjonellv2-5fb030af5c27.herokuapp.com/rankCard?name=${encodeURIComponent(name)}&level=Level${level}&color=auto&facebookSenderId=${senderID}&progress=69&rank=1&currentXp=${currentExp}&requiredXp=${requiredXp}&showXp=true`;
-
-  try {
-    const response = await axios.get(rankApiUrl, { responseType: 'arraybuffer' });
-
-    const imagePath = path.join(__dirname, 'cache', `rankcard.jpeg`);
-    await fsPromises.writeFile(imagePath, response.data, 'binary');
-
-    return imagePath;
-  } catch (error) {
-    console.error('Error updating Rank API:', error.message);
-    return null;
-  }
+if (!fs.existsSync(cacheDir)) {
+  fs.mkdirSync(cacheDir);
 }
 
 module.exports.config = {
   name: "rankup",
-  hasPermission: 0,
-  version: "1.0.0",
-  credits: "Jonell Magallanes",
-  Description: "Announcement Rankup :>",
+  version: "7.3.1",
+  hasPermssion: 1,
+  credits: "SHANKAR",
+  description: "Announce rankup for each group, user",
   usePrefix: true,
-  commandCategory: "Rankup",
-  usages: "?",
-  cooldowns: 5,
+  commandCategory: "Edit-IMG",
+  dependencies: {
+    "fs-extra": ""
+  },
+  cooldowns: 2,
 };
 
-module.exports.handleEvent = async function ({ api, event }) {
-  const userId = event.senderID;
+module.exports.handleEvent = async function({
+  api, event, Currencies, Users, getText }) {
+  var { threadID, senderID } = event;
+  const { loadImage, createCanvas } = require("canvas");
+  const fs = global.nodemodule["fs-extra"];
+  const axios = global.nodemodule["axios"];
+  let pathImg = __dirname + "/cache/rankup/rankup.png";
+  let pathAvt1 = __dirname + "/cache/Avtmot.png";
+  var id1 = event.senderID;
 
-  let userData;
-  try {
-    userData = JSON.parse(await fsPromises.readFile(userDataPath, 'utf8'));
-  } catch (error) {
-    userData = {};
-  }
 
-  if (userData[userId]) {
-    userData[userId].exp = (userData[userId].exp || 0) + 2;
-    const expNeeded = Math.floor(5 * Math.pow(userData[userId].level || 1, 2));
-    if (userData[userId].exp >= expNeeded) {
-      userData[userId].level += 1;
-      userData[userId].exp -= expNeeded;
-      const rankLevel = userData[userId].level;
-      const announcement = `⏫ | ${await getUserName(api, userId)} Your Keyboard Hero has leveled up to level ${rankLevel}!`;
+  threadID = String(threadID);
+  senderID = String(senderID);
 
-      const imagePath = await updateRankApi(userId, await getUserName(api, userId), userData[userId].exp, rankLevel);
+  const thread = global.data.threadData.get(threadID) || {};
 
-      if (imagePath) {
-        api.sendMessage({
-          body: announcement,
-          attachment: fs.createReadStream(imagePath)
-        }, event.threadID);
-      } else {
-        api.sendMessage(announcement, event.threadID);
+  let exp = (await Currencies.getData(senderID))
+    .exp;
+  exp = exp += 1;
+
+  if (isNaN(exp)) return;
+
+  if (typeof thread["rankup"] != "undefined" && thread["rankup"] == false) {
+    await Currencies.setData(senderID, {
+      exp
+    });
+    return;
+  };
+
+  const curLevel = Math.floor((Math.sqrt(1 + (4 * exp / 3) + 1) / 2));
+  const level = Math.floor((Math.sqrt(1 + (4 * (exp + 1) / 3) + 1) / 2));
+
+  if (level > curLevel && level != 1) {
+    const name = global.data.userName.get(senderID) || await Users.getNameUser(senderID);
+    var messsage = (typeof thread.customRankup == "undefined") ? msg = getText("levelup") : msg = thread.customRankup
+      , arrayContent;
+
+    messsage = messsage
+      .replace(/\{name}/g, name)
+      .replace(/\{level}/g, level);
+
+    const moduleName = this.config.name;
+
+    var background = [
+      "https://i.imgur.com/mXmaIFr.jpeg",
+      "https://i.imgur.com/SeLdZua.jpeg",
+      "https://i.imgur.com/HrHPulp.jpeg",
+      "https://i.imgur.com/zZpub9k.jpeg",
+      "https://i.imgur.com/EP7gdQy.jpeg",
+      "https://i.imgur.com/pKOgCjs.jpeg",
+      "https://i.imgur.com/1jPLnZX.jpeg",
+      "https://i.imgur.com/QmtNkyQ.jpg",
+      "https://i.imgur.com/qybgIRD.jpg",
+      "https://i.imgur.com/RFRARpY.jpg",
+      "https://i.imgur.com/B7i6dhL.jpg",
+      "https://i.imgur.com/LkHUQMJ.jpeg"
+    ];
+    var rd = background[Math.floor(Math.random() * background.length)];
+    let getAvtmot = (
+      await axios.get(
+        `https://graph.facebook.com/${id1}/picture?width=720&height=720&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`, {
+        responseType: "arraybuffer"
       }
-    }
-  } else {
-    userData[userId] = { exp: 1, level: 1 };
+      )
+    )
+      .data;
+    fs.writeFileSync(pathAvt1, Buffer.from(getAvtmot, "utf-8"));
+
+    let getbackground = (
+      await axios.get(`${rd}`, {
+        responseType: "arraybuffer"
+        ,
+      })
+    )
+      .data;
+    fs.writeFileSync(pathImg, Buffer.from(getbackground, "utf-8"));
+
+    let baseImage = await loadImage(pathImg);
+    let baseAvt1 = await loadImage(pathAvt1);
+    let canvas = createCanvas(baseImage.width, baseImage.height);
+    let ctx = canvas.getContext("2d");
+    ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+    ctx.rotate(-25 * Math.PI / 180);
+    ctx.drawImage(baseAvt1, 27.3, 103, 108, 108);
+    const imageBuffer = canvas.toBuffer();
+    fs.writeFileSync(pathImg, imageBuffer);
+    fs.removeSync(pathAvt1);
+    api.sendMessage({
+      body: messsage
+      , mentions: [{
+        tag: name
+        , id: senderID
+      }]
+      , attachment: fs.createReadStream(pathImg)
+    }, event.threadID, () => fs.unlinkSync(pathImg));
+
   }
 
-  await fsPromises.writeFile(userDataPath, JSON.stringify(userData, null, 2));
+  await Currencies.setData(senderID, {
+    exp
+  });
+  return;
 }
 
-module.exports.run = async function ({ api, event }) {
-  api.sendMessage("This Command has rankup function", event.threadID);
-};
+module.exports.languages = {
+  "en": {
+    "on": "on",
+    "off": "off",
+    "successText": "success notification rankup!",
+    "levelup": "--------------------------------------------\n{name}, ऐसे ही पढ़ाई लिखाई छोड़ के ग्रुप मैसेज किया करो तुम्हारा लेवल बढ़ेगा।। ये रहा तुम्हारा लेवल👉{level}\n--------------------------------------------",
+  }
+}
+
+module.exports.run = async function({ api, event, Threads, getText }) {
+  const {
+    threadID
+    , messageID
+  } = event;
+  let data = (await Threads.getData(threadID))
+    .data;
+
+  if (typeof data["rankup"] == "undefined" || data["rankup"] == false) data["rankup"] = true;
+  else data["rankup"] = false;
+
+  await Threads.setData(threadID, {
+    data
+  });
+  global.data.threadData.set(threadID, data);
+  return api.sendMessage(`${(data["rankup"] == true) ? getText("on") : getText("off")} ${getText("successText")}`, threadID, messageID);
+}
