@@ -1,52 +1,48 @@
-const { Hercai } = require('hercai');
-
-const herc = new Hercai();
+const axios = require('axios');
 
 module.exports.config = {
-  name: 'ss',
-  version: '1.0.0',
-  hasPermssion: 0,
-  credits: 'Marjhun Baylon',//wag nyo sana i change credits 
-  description: 'Ask a question to Hercai AI',
-  usePrefix: false,
-  commandCategory: 'educational',
-  usages: '[your_question]',
-  cooldowns: 2,
-  usePrefix: false,
+    name: "ss",
+    version: "1.0.0",
+    hasPermssion: 0,
+    credits: "Jonell Magallanes",
+    description: "EDUCATIONAL",
+    usePrefix: false,
+    commandCategory: "other",
+    usages: "[question]",
+    cooldowns: 10
 };
 
-module.exports.run = async ({ api, event, args, senderID, messageID }) => {
-  if (args.length < 1) {
-    return api.sendMessage('HELLO 🌸 I AM SS AI, DESGN  AND CREATED BY SHANKAR SUMAN, HOW MAY I ASSIST YOU TODAY.', event.threadID);
-  }
+module.exports.run = async function ({ api, event, args }) {
+    const content = encodeURIComponent(args.join(" "));
+    const id = event.senderID;
 
-  const botname = 'TAKLU BABU';
-  const userName = await getUserName(api, senderID);
-  const question = args.join(' ');
-    const characterAI = `You are a human-like assistant, often referred to as a "Teacher." Your name is ${botname}. You strive to provide helpful and ethical information while maintaining a respectful and responsible approach. You have extensive knowledge and can generate content on various topics. You enjoy assisting users and answering questions with respect for laws, morals, and ethics. Your goal is to provide valuable and considerate responses. Your preferred writing style is conversational and informative. Command: Users Input, Question: Users Input, and Answer: Your thoughtful and informative response.`;
+    if (!content) return api.sendMessage("Please provide your question.\n\nExample: ai what is the solar system?", event.threadID, event.messageID);
 
-  herc.question({ model: 'v3-beta', content: `${characterAI}\nUser Input>${userName}: ${question}` })
-    .then((response) => {
-      const reply = `SS AI😽:\n\n${response.reply}\n\nOwner: Shankar suman`;
+    try {
+        api.sendMessage("Typing......", event.threadID);
 
-      api.sendMessage(reply, event.threadID, event.messageID);
-    })
-    .catch((error) => {
-      console.error('Error while making the AI API request:', error);
-      api.sendMessage('An error occurred while processing your question.', event.threadID);
-    });
-};
+        // Blackbox AI API endpoint
+        const apiUrl = `https://blackboxai-api.herokuapp.com/api/converse`;
 
-// Function to get the user's name
-async function getUserName(api, userID) {
-  try {
-    const userInfo = await api.getUserInfo(userID);
-    if (userInfo && userInfo[userID]) {
-      return userInfo[userID].name;
-    } else {
-      return "Users";
+        const data = {
+            input: content,
+            userId: id
+        };
+
+        const response = await axios.post(apiUrl, data);
+        const result = response.data.response;
+
+        const userNames = await getUserNames(api, event.senderID);
+        const responseMessage = `${result}\n\n👤 𝖰𝗎𝖾𝗌𝗍𝗂𝗈𝗇 𝖠𝗌𝗄𝖾𝖽 𝖻𝗒: ${userNames.join(', ')}`;
+
+        api.sendMessage(responseMessage, event.threadID);
+    } catch (error) {
+        console.error(error);
+        api.sendMessage("An error occurred while processing your request.", event.threadID);
     }
-  } catch (error) {
-    return "Users";
-  }
+};
+
+async function getUserNames(api, uid) {
+    const user = await api.getUserInfo(uid);
+    return Object.values(user).map(u => u.name);
 }
