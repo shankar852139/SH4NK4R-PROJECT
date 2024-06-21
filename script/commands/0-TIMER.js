@@ -5,8 +5,8 @@ hasPermssion: 0,
 credits: "SHANKAR SUMAN",
 description: "Set Karne Ke Bad Automatically Msg Send Karega",
 commandCategory: "group messenger",
+ usePrefix: false, 
 usages: "[]",
-prefix: false,
 cooldowns: 3
 };
 const nam = [{
