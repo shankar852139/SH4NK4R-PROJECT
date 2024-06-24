@@ -15,8 +15,13 @@ module.exports.config = {
 };
 
 const gifs = [
-    "https://ibb.co/JnmSC0c",
-    "https://ibb.co/ckQ00gz"
+    "https://i.ibb.co/nfnQ03z/image.gif",
+    "https://i.ibb.co/hVZ0Nh3/image.gif",
+    "https://i.ibb.co/kM3R74T/image.gif",
+    "https://i.ibb.co/RY39vVD/image.gif",
+    "https://i.ibb.co/CntGdHs/image.gif",
+    "https://i.ibb.co/Wn0dWxS/image.gif",
+    "https://i.ibb.co/frYWMkN/image.gif"
 ];
 
 const messages = [
