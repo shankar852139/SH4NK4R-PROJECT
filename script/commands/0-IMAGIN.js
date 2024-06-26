@@ -96,7 +96,7 @@ module.exports.run = async function ({ api, event, args }) {
       messageID
     );
 
-    const API = `https://aliestercrowley.com/api/crowgen.php?model=${model}&prompt=${encodeURIComponent(prompt)}`;
+    const API = `https://all-image-genator-d1p.onrender.com/dipto/dalle?prompt=${encodeURIComponent(prompt)}`;
 
     const timeout = 20000;
     const imageStreamPromise = axios.get(API, { responseType: 'arraybuffer' });
