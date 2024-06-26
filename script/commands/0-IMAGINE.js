@@ -34,7 +34,7 @@ module.exports.run = async function ({ api, event, args }) {
       }
       const waitingMessage = await api.sendMessage("Please wait..", event.threadID, event.mesaageID);
 
-    const API = `https://midjourney.emma999999.repl.co/imagine?prompt=${encodeURIComponent(
+    const API = `https://all-image-genator-d1p.onrender.com/dipto/dalle?prompt=${encodeURIComponent(
         prompt
 )}&model=${model}&
 ratio=${ratio}`;
