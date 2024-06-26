@@ -2,7 +2,7 @@ const axios = require('axios');
 const fs = require('fs-extra');
 
 module.exports.config = {
-  name: 'imagine',
+  name: 'dalle3',
   version: '1.0.0',
   hasPermission: 0,
   credits: 'SHANKAR',
