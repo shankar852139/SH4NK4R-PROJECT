@@ -49,7 +49,7 @@ const models = [
 ];
 
 module.exports.config = {
-  name: 'imagine',
+  name: 'imagine2',
   version: '3.0',
   hasPermission: 0,
   credits: 'SHANKAR',
