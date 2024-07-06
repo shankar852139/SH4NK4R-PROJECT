@@ -2,6 +2,7 @@ module.exports.config = {
   name: "anti",
   credits: "SHANKAR SUMAN",
   hasPermission: 1,
+  usePrefix: false,
   dependencies: {
     "imgbb-uploader": "",
     "axios": "",
