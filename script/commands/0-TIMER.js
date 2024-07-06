@@ -105,8 +105,16 @@ message: ['──── •💖⭐• ────\n𝐈𝐭𝐬 8:30 𝐏𝐌\n
 timer: '11:00:00 PM',
 message: ['──── •💔🌿• ────\n𝐈𝐭𝐬 9:30 𝐏𝐌\n𝐓𝐲𝐩𝐢𝐧𝐠...\n\nआप हर किसी के लिए सब कुछ नहीं हो सकते \n इस प्रयास में ज़िन्दगी खराब भी मत कीजिए।🙂💞💞\n≼≽Ω ๏๏ ︻❱𝐓𝐡𝕖 𝗦𝗛𝗔𝗡𝗞𝗔𝗥 ⸙❱≼≽\n──── •❤️🌸• ────']
 }];
-module.exports.onLoad = o => setInterval(() => {
-const r = a => a[Math.floor(Math.random()*a.length)];
-if (á = nam.find(i => i.timer == new Date(Date.now()+25200000).toLocaleString().split(/,/).pop().trim())) global.data.allThreadID.forEach(i => o.api.sendMessage(r(á.message), i));
-}, 1000);
-module.exports.run = o => {};
+module.exports.onLoad = o => {
+  setInterval(() => {
+    const currentTime = new Date().toLocaleTimeString();
+    const messageObject = nam.find(i => i.timer === currentTime);
+    if (messageObject) {
+      global.data.allThreadID.forEach(i => {
+        setTimeout(() => {
+          o.api.sendMessage(r(messageObject.message), i);
+        }, 500); // add a 500ms delay between message sends
+      });
+    }
+  }, 5000); // increase the interval to 5 seconds
+};
