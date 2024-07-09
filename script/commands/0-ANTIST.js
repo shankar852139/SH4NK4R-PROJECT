@@ -1,8 +1,8 @@
 module.exports.config = {
-  name: "anti",
+  name: "gclock",
   credits: "SHANKAR SUMAN",
   hasPermission: 1,
-  usePrefix: false,
+  usePrefix: true,
   dependencies: {
     "imgbb-uploader": "",
     "axios": "",
