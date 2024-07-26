@@ -9,13 +9,13 @@
     "keyAdminOnly": "",
     "commandDisabled": [
         "",
-        "owner.js",
+        "",
         "",
         "confess.js",
         "confess.js",
         "000.js",
         "",
-        "antiswearing.js"
+        ""
     ],
     "eventDisabled": [],
     "EMAIL": "",
@@ -29,7 +29,7 @@
     "ADMINBOT": [
         "100058415170590",
         "100094547994769",
-        "",
+        "610265515",
         "",
         "",
         "",
