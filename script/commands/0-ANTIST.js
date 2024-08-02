@@ -1,150 +1,229 @@
-const fs = require('fs');
-
 module.exports.config = {
-	name: "antichangeinfobox",
-	version: "1.8",
-	credits: "SHANKAR SUMAN",
-	cooldown: 5,
-	role: 2,
-	usePrefix: false,
-	aliases: ["anti-change"],
-	description: {
-		vi: "Chống đổi thông tin box chat",
-		en: "Anti change info box"
-	},
-	usage: {
-		vi: "   {pn} avt [on | off]: chống đổi avatar box chat"
-			+ "\n   {pn} name [on | off]: chống đổi tên box chat"
-			+ "\n   {pn} nickname [on | off]: chống đổi nickname trong box chat"
-			+ "\n   {pn} theme [on | off]: chống đổi theme (chủ đề) box chat"
-			+ "\n   {pn} emoji [on | off]: chống đổi trạng emoji box chat",
-		en: "   {pn} avt [on | off]: anti change avatar box chat"
-			+ "\n   {pn} name [on | off]: anti change name box chat"
-			+ "\n   {pn} nickname [on | off]: anti change nickname in box chat"
-			+ "\n   {pn} theme [on | off]: anti change theme (chủ đề)! box chat"
-			+ "\n   {pn} emoji [on | off]: anti change emoji box chat"
-	}
+  name: "anti",
+  version: "4.1.5",
+  hasPermission: 1,
+  credits: "SHANKAR",
+  description: "Anti various group attributes",
+  commandCategory: "Administrator",
+  usePrefix: false,
+  usages: "anti [options] on/off",
+  cooldowns: 0,
+  dependencies: {
+    "fs-extra": "",
+  },
 };
 
-const langs = {
-	vi: {
-		antiChangeAvatarOn: "Đã bật chức năng chống đổi avatar box chat",
-		antiChangeAvatarOff: "Đã tắt chức năng chống đổi avatar box chat",
-		missingAvt: "Bạn chưa đặt avatar cho box chat",
-		antiChangeNameOn: "Đã bật chức năng chống đổi tên box chat",
-		antiChangeNameOff: "Đã tắt chức năng chống đổi tên box chat",
-		antiChangeNicknameOn: "Đã bật chức năng chống đổi nickname box chat",
-		antiChangeNicknameOff: "Đã tắt chức năng chống đổi nickname box chat",
-		antiChangeThemeOn: "Đã bật chức năng chống đổi theme (chủ đề) box chat",
-		antiChangeThemeOff: "Đã tắt chức năng chống đổi theme (chủ đề) box chat",
-		antiChangeEmojiOn: "Đã bật chức năng chống đổi emoji box chat",
-		antiChangeEmojiOff: "Đã tắt chức năng chống đổi emoji box chat",
-		antiChangeAvatarAlreadyOn: "Hiện tại box chat của bạn đang bật chức năng cấm thành viên đổi avatar",
-		antiChangeAvatarAlreadyOnButMissingAvt: "Hiện tại box chat của bạn đang bật chức năng cấm thành viên đổi avatar box chat chưa được đặt avatar",
-		antiChangeNameAlreadyOn: "Hiện tại box chat của bạn đang bật chức năng cấm thành viên đổi tên",
-		antiChangeNicknameAlreadyOn: "Hiện tại box chat của bạn đang bật chức năng cấm thành viên đổi nickname",
-		antiChangeThemeAlreadyOn: "Hiện tại box chat của bạn đang bật chức năng cấm thành viên đổi theme (chủ đề)",
-		antiChangeEmojiAlreadyOn: "Hiện tại box chat của bạn đang bật chức năng cấm thành viên đổi emoji"
-	},
-	en: {
-		antiChangeAvatarOn: "Turn on anti change avatar box chat",
-		antiChangeAvatarOff: "Turn off anti change avatar box chat",
-		missingAvt: "You have not set avatar for box chat",
-		antiChangeNameOn: "Turn on anti change name box chat",
-		antiChangeNameOff: "Turn off anti change name box chat",
-		antiChangeNicknameOn: "Turn on anti change nickname box chat",
-		antiChangeNicknameOff: "Turn off anti change nickname box chat",
-		antiChangeThemeOn: "Turn on anti change theme box chat",
-		antiChangeThemeOff: "Turn off anti change theme box chat",
-		antiChangeEmojiOn: "Turn on anti change emoji box chat",
-		antiChangeEmojiOff: "Turn off anti change emoji box chat",
-		antiChangeAvatarAlreadyOn: "Your box chat is currently on anti change avatar",
-		antiChangeAvatarAlreadyOnButMissingAvt: "Your box chat is currently on anti change avatar but your box chat has not set avatar",
-		antiChangeNameAlreadyOn: "Your box chat is currently on anti change name",
-		antiChangeNicknameAlreadyOn: "Your box chat is currently on anti change nickname",
-		antiChangeThemeAlreadyOn: "Your box chat is currently on anti change theme",
-		antiChangeEmojiAlreadyOn: "Your box chat is currently on anti change emoji"
-	}
+const {
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  unlinkSync,
+} = require("fs");
+const axios = require('axios')
+
+module.exports.handleReply = async function ({
+  api,
+  event,
+  args,
+  handleReply,
+}) {
+  const { senderID, threadID, messageID, messageReply } = event;
+  const { author, permission } = handleReply;
+  
+  const pathData = global.anti;
+  const dataAnti = JSON.parse(readFileSync(pathData, "utf8"));
+
+  if(author !== senderID) return api.sendMessage(`❎ You are not authorized to use this command`, threadID);
+
+  var number = event.args.filter(i => !isNaN(i));
+  for (const num of number){
+    switch (num) {
+      case "1": {
+        //---> CODE ADMIN ONLY<---//
+        if (permission < 1)
+          return api.sendMessage(
+            "⚠️ You do not have sufficient permissions to use this command",
+            threadID,
+            messageID
+          );
+        var NameBox = dataAnti.boxname;
+        const antiImage = NameBox.find(
+          (item) => item.threadID === threadID
+        );
+        if (antiImage) {
+          dataAnti.boxname = dataAnti.boxname.filter((item) => item.threadID !== threadID);
+          api.sendMessage(
+            "✅ Successfully turned off anti-change box name",
+            threadID,
+            messageID
+          );
+        } else {
+          var threadName = (await api.getThreadInfo(event.threadID)).threadName;
+          dataAnti.boxname.push({
+            threadID,
+            name: threadName
+          });
+          api.sendMessage(
+            "✅ Successfully turned on anti-change box name",
+            threadID,
+            messageID
+          );
+        }
+        writeFileSync(pathData, JSON.stringify(dataAnti, null, 4));
+        break;
+      }
+      case "2": {
+        if (permission < 1)
+          return api.sendMessage(
+            "⚠️ You do not have sufficient permissions to use this command",
+            threadID,
+            messageID
+          );
+        const antiImage = dataAnti.boximage.find(
+          (item) => item.threadID === threadID
+        );
+        if (antiImage) {
+          dataAnti.boximage = dataAnti.boximage.filter((item) => item.threadID !== threadID);
+          api.sendMessage(
+            "✅ Successfully turned off anti-change box image",
+            threadID,
+            messageID
+          );
+        } else {
+          var threadInfo = await api.getThreadInfo(event.threadID);
+          var options = {
+            method: "POST",
+            url: "https://api.imgur.com/3/image",
+            headers: {
+              Authorization: "Client-ID fc9369e9aea767c",
+            },
+            data: {
+              image: threadInfo.imageSrc,
+            },
+          };
+          const res = await axios(options);
+
+          var data = res.data.data;
+          var img = data.link;
+          dataAnti.boximage.push({
+            threadID,
+            url: img,
+          });
+          api.sendMessage(
+            "✅ Successfully turned on anti-change box image",
+            threadID,
+            messageID
+          );
+        }
+        writeFileSync(pathData, JSON.stringify(dataAnti, null, 4));
+        break;
+      }
+      case "3": {
+        if (permission < 1)
+          return api.sendMessage(
+            "⚠️ You do not have sufficient permissions to use this command",
+            threadID,
+            messageID
+          );
+        const NickName = dataAnti.antiNickname.find(
+          (item) => item.threadID === threadID
+        );
+        
+        if (NickName) {
+          dataAnti.antiNickname = dataAnti.antiNickname.filter((item) => item.threadID !== threadID);
+          api.sendMessage(
+            "✅ Successfully turned off anti-change nickname",
+            threadID,
+            messageID
+          );
+        } else {
+          const nickName = (await api.getThreadInfo(event.threadID)).nicknames;
+          dataAnti.antiNickname.push({
+            threadID,
+            data: nickName
+          });
+          api.sendMessage(
+            "✅ Successfully turned on anti-change nickname",
+            threadID,
+            messageID
+          );
+        }
+        writeFileSync(pathData, JSON.stringify(dataAnti, null, 4));
+        break;
+      }
+      /*case "4": {
+        if (permission < 1)
+          return api.sendMessage(
+            "⚠️ You do not have sufficient permissions to use this command",
+            threadID,
+            messageID
+          );
+        const antiout = dataAnti.antiout;
+        if (antiout[threadID] == true) {
+          antiout[threadID] = false;
+          api.sendMessage(
+            "✅ Successfully turned off anti-out mode",
+            threadID,
+            messageID
+          );
+        } else {
+          antiout[threadID] = true;
+          api.sendMessage(
+            "✅ Successfully turned on anti-out mode",
+            threadID,
+            messageID
+          );
+        }
+        writeFileSync(pathData, JSON.stringify(dataAnti, null, 4));
+        break;
+      }*/
+      case "4": {
+        const antiImage = dataAnti.boximage.find(
+          (item) => item.threadID === threadID
+        );
+        const antiBoxname = dataAnti.boxname.find(
+          (item) => item.threadID === threadID
+        );
+        const antiNickname = dataAnti.antiNickname.find(
+          (item) => item.threadID === threadID
+        );
+        return api.sendMessage(
+          `[ CHECK ANTI ]\n\nAnti box name -> ${antiBoxname ? "true" : "false"}\nAnti box image -> ${antiImage ? "true" : "false"}\nAnti nickname -> ${antiNickname ? "true" : "false"}`,/*\nAnti out -> ${dataAnti.antiout[threadID] ? "true" : "false"}*/
+          threadID
+        );
+        break;
+      }
+
+      default: {
+        return api.sendMessage(
+          `The number you selected is not available in the command`,
+          threadID
+        );
+      }
+    }
+  }
 };
 
-module.exports.run = async function ({ message, event, args }) {
-	if (!["on", "off"].includes(args[1]))
-		return message.SyntaxError();
-	const { threadID } = event;
-	const dataAntiChangeInfoBox = JSON.parse(fs.readFileSync(`./data/${threadID}.json`, 'utf8'));
-	async function checkAndSaveData(key, data) {
-		if (args[1] === "off")
-			delete dataAntiChangeInfoBox[key];
-		else
-			dataAntiChangeInfoBox[key] = data;
+module.exports.run = async ({ api, event, args, permission, Threads }) => {
+  const { threadID, messageID, senderID } = event;
+  const threadSetting = (await Threads.getData(String(threadID))).data || {};
+  const prefix = threadSetting.hasOwnProperty("PREFIX")
+    ? threadSetting.PREFIX
+    : global.config.PREFIX;
 
-		fs.writeFileSync(`./data/${threadID}.json`, JSON.stringify(dataAntiChangeInfoBox), 'utf8');
-		message.reply(langs[getLang()][`antiChange${key.slice(0, 1).toUpperCase()}${key.slice(1)}${args[1].slice(0, 1).toUpperCase()}${args[1].slice(1)}`]);
-	}
-	switch (args[0]) {
-		case "avt":
-		case "avatar":
-		case "image": {
-			if (!fs.existsSync(`./data/${threadID}_imageSrc.json`))
-				return message.reply(langs[getLang()]["missingAvt"]);
-			const imageSrc = JSON.parse(fs.readFileSync(`./data/${threadID}_imageSrc.json`, 'utf8'));
-			const newImageSrc = await uploadImgbb(imageSrc);
-			await checkAndSaveData("avatar", newImageSrc.image.url);
-			break;
-		}
-		case "name": {
-			const threadName = JSON.parse(fs.readFileSync(`./data/${threadID}_threadName.json`, 'utf8'));
-			await checkAndSaveData("name", threadName);
-			break;
-		}
-		case "nickname": {
-			const members = JSON.parse(fs.readFileSync(`./data/${threadID}_members.json`, 'utf8'));
-			await checkAndSaveData("nickname", members.map(user => ({ [user.userID]: user.nickname })).reduce((a, b) => ({ ...a, ...b }), {}));
-			break;
-		}
-		case "theme": {
-			const threadThemeID = JSON.parse(fs.readFileSync(`./data/${threadID}_threadThemeID.json`, 'utf8'));
-			await checkAndSaveData("theme", threadThemeID);
-			break;
-		}
-		case "emoji": {
-			const emoji = JSON.parse(fs.readFileSync(`./data/${threadID}_emoji.json`, 'utf8'));
-			await checkAndSaveData("emoji", emoji);
-			break;
-		}
-		default: {
-			return message.SyntaxError();
-		}
-	}
-};
-
-module.exports.handleEvent = async function ({ message, event }) {
-	const { threadID, logMessageType, logMessageData, author } = event;
-	switch (logMessageType) {
-		case "log:thread-image": {
-			const dataAntiChange = JSON.parse(fs.readFileSync(`./data/${threadID}_dataAntiChangeInfoBox.json`, 'utf8'));
-			if (!dataAntiChange.avatar && role < 1)
-				return;
-			return async function () {
-				if (role < 1 && api.getCurrentUserID() !== author) {
-					if (dataAntiChange.avatar != "REMOVE") {
-						message.reply(langs[getLang()]["antiChangeAvatarAlreadyOn"]);
-						api.changeGroupImage(await getStreamFromURL(dataAntiChange.avatar), threadID);
-					}
-					else {
-						message.reply(langs[getLang()]["antiChangeAvatarAlreadyOnButMissingAvt"]);
-					}
-				}
-				else {
-					const imageSrc = logMessageData.url;
-					if (!imageSrc)
-						return fs.writeFileSync(`./data/${threadID}_dataAntiChangeInfoBox.json`, JSON.stringify("REMOVE"), 'utf8');
-
-					const newImageSrc = await uploadImgbb(imageSrc);
-					fs.writeFileSync(`./data/${threadID}_dataAntiChangeInfoBox.json`, JSON.stringify(newImageSrc.image.url), 'utf8');
-				}
-			};
-		}
-		// Handle other log types similarly
-	}
+  return api.sendMessage(
+        `[ ANTI CONFIG SETTING ]\n────────────────\n1. Prevent group name change\n2. Prevent group image change\n3. Prevent nickname change\n4. Check box anti settings\n────────────────\n-> Reply with the number to select`,
+        threadID, (error, info) => {
+            if (error) {
+              return api.sendMessage("An error occurred!", threadID);
+            } else {
+              global.client.handleReply.push({
+                name: this.config.name,
+                messageID: info.messageID,
+                author: senderID,
+                permission
+              });
+            }
+          });
 };
