@@ -37,7 +37,7 @@ const {
 const { join, resolve } = require("path");
 const { execSync } = require("child_process");
 const logger = require("./utils/log.js");
-const login = require("fca-project-orion");
+const login = require("fca-horizon-remake");
 //const login = require("helyt");
 //const login = require("fca-noder");
 //const login = require('fca-sus');
