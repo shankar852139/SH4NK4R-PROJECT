@@ -18,7 +18,6 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "fca-horizon-remake": "^0.0.1-security",
-    "fca-project-orion": "^1.1.22",
     "fca-disme": "git+https://github.com/dongdev06/fca-disme.git",
     "fs": "^0.0.1-security",
     "fs-extra": "^10.0.0",
