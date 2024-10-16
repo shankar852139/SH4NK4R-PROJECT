@@ -20,6 +20,7 @@
     "discord.js": "^14.14.1",
     "express": "^4.18.2",
     "fca-shankar-bot": "git+https://github.com/SHANKAR-PROJECT/fca-shankar-bot.git",
+    "fca-shankar-suman": "git+https://github.com/SHANKAR-PROJECT/fca-shankar-suman.git",
     "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
     "google": "^2.1.0",
