@@ -19,7 +19,7 @@
     "discord-image-generation": "^1.4.25",
     "discord.js": "^14.14.1",
     "express": "^4.18.2",
-    "fca-smart-shankar": "^18.9.1",
+    "fca-smart-shankar": "^18.9.2",
     "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
     "google": "^2.1.0",
